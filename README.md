@@ -1,7 +1,8 @@
-<br />
+<br /><br /><br /><br />
 <p align="center">
-  <img width="250" src="assets/icon.png" />
+  <img width="240" src="assets/icon.png" />
 </p>
+<br /><br />
 
 # a-world-of-trees
 > A set of tree data structures with idiomatic language implementations.
