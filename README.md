@@ -1,6 +1,6 @@
 <br />
 <p align="center">
-  <img width="600" src="assets/icon.png" />
+  <img width="350" src="assets/icon.png" />
 </p>
 
 # a-world-of-trees
