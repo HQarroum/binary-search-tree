@@ -14,7 +14,12 @@ LIB_SHARED_NAME = lib$(LIB_NAME)$(LIB_SHARED_EXT)
 # Static library output name
 LIB_STATIC_NAME = lib$(LIB_NAME)$(LIB_STATIC_EXT)
 
-SRC = binary_search_tree.c
+SRC = binary_search_tree.c \
+		binary_search_tree_insert.c \
+		binary_search_tree_search.c \
+		binary_search_tree_remove.c \
+		binary_search_tree_compare.c \
+		binary_search_tree_iterate.c
 
 CFLAGS = -std=c99 -W -Wall -Werror -ansi -fPIC -fprofile-arcs -ftest-coverage
 

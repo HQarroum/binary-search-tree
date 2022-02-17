@@ -8,7 +8,6 @@ extern "C" {
 #include <stdlib.h>
 #include <stddef.h>
 #include <string.h>
-#include <stdint.h>
 
 /**
  * @brief Type definition for the comparator function
@@ -17,32 +16,22 @@ extern "C" {
 typedef int (*bst_comparator_t)(const void*, const void*);
 
 /**
+ * @brief Defines a type for iteration callback
+ * return types.
+ */
+typedef enum bst_callback_return_t {
+  BST_CALLBACK_CONTINUE,
+  BST_CALLBACK_STOP
+} bst_callback_return_t;
+
+/**
  * @brief Describes the direction binding that can
  * exist between two nodes.
  */
 typedef enum bst_direction_t {
   LEFT,
-  RIGHT,
-  NO_DIRECTION
+  RIGHT
 } bst_direction_t;
-
-/**
- * @brief Describes the relationship type that can
- * exist between two nodes.
- */
-typedef enum bst_relationship_type_t {
-  PARENT,
-  CHILD,
-  NO_RELATIONSHIP
-} bst_relationship_type_t;
-
-/**
- * @brief Describes a relationship between two nodes.
- */
-typedef struct bst_relationship_t {
-  bst_relationship_type_t type;
-  bst_direction_t direction;
-} bst_relationship_t;
 
 /**
  * @brief Describes the options that can be passed to the
@@ -65,6 +54,22 @@ typedef struct bst_node_t {
 } bst_node_t;
 
 /**
+ * @brief Describes the binary-search tree
+ * attributes.
+ */
+typedef struct bst_tree_t {
+  bst_node_t*   root;
+  size_t        size;
+  bst_options_t options;
+} bst_tree_t;
+
+typedef struct bst_search_ctx_t {
+  const void* data;
+  const bst_node_t* result;
+  size_t iterations;
+} bst_search_ctx_t;
+
+/**
  * @brief Type definition for the callback function
  * implementation used to traverse the binary-search tree.
  * @param node the currently visited node.
@@ -77,16 +82,6 @@ typedef void (*bst_callback_t)(const bst_node_t* node, void* user_data);
  * @param node the starting node from which the traversal will start.
  */
 typedef void (*bst_traversal_strategy_t)(const bst_node_t* node, bst_callback_t callback, void* user_data);
-
-/**
- * @brief Describes the binary-search tree
- * attributes.
- */
-typedef struct bst_tree_t {
-  bst_node_t*   root;
-  size_t        size;
-  bst_options_t options;
-} bst_tree_t;
 
 /**
  * @brief Creates a new dynamically allocated binary-search tree instance.
@@ -182,6 +177,50 @@ const bst_node_t* bst_get_max_from(const bst_node_t* node);
 const bst_node_t* bst_get_max(const bst_tree_t* tree);
 
 /**
+ * @brief A helper function to find the kth largest value in
+ * the given subtree.
+ * @param node the root node associated with the subtree to
+ * look up the kth largest value in.
+ * @param k the kth largest value to look up.
+ * @param count the number of nodes visited so far.
+ * @return the node associated with the kth largest value in
+ * the given subtree, or NULL if no nodes were matching.
+ */
+const bst_node_t* bst_get_kth_largest_from(const bst_node_t* node, size_t k);
+
+/**
+ * @brief A helper function to find the kth smallest value in
+ * the given subtree.
+ * @param node the root node associated with the subtree to
+ * look up the kth smallest value in.
+ * @param k the kth smallest value to look up.
+ * @param count the number of nodes visited so far.
+ * @return the node associated with the kth smallest value in
+ * the given subtree, or NULL if no nodes were matching.
+ */
+const bst_node_t* bst_get_kth_smallest_from(const bst_node_t* node, size_t k);
+
+/**
+ * @brief A helper function to find the kth largest value in
+ * the given binary-search tree.
+ * @param tree the tree to look up the kth largest value in.
+ * @param k the kth largest value to look up.
+ * @return the node associated with the kth largest value in
+ * the given binary-search tree, or NULL if no nodes were matching.
+ */
+const bst_node_t* bst_get_kth_largest(const bst_tree_t* tree, size_t k);
+
+/**
+ * @brief A helper function to find the kth smallest value in
+ * the given binary-search tree.
+ * @param tree the tree to look up the kth smallest value in.
+ * @param k the kth smallest value to look up.
+ * @return the node associated with the kth smallest value in
+ * the given binary-search tree, or NULL if no nodes were matching.
+ */
+const bst_node_t* bst_get_kth_smallest(const bst_tree_t* tree, size_t k);
+
+/**
  * @param tree The tree to return the size of.
  * @return the number of nodes contained by the
  * binary search tree.
@@ -240,6 +279,8 @@ void bst_depth_first_traversal(const bst_node_t* node, bst_callback_t callback, 
  * @param callback A callback function invoked for each node.
  */
 void bst_breadth_first_traversal(const bst_node_t* node, bst_callback_t callback, void* user_data);
+
+void bst_search_traversal(const bst_node_t* node, bst_callback_t callback, void* user_data);
 
 /**
  * @brief A function implementation comparing the value of two nodes as integers.
