@@ -6,11 +6,12 @@
  * @param node The node to start the traversal from.
  * @param callback A callback function invoked for each node.
  */
-void bst_in_order_traversal(const bst_node_t* node, bst_callback_t callback, void* user_data) {
-  if (node) {
-    bst_in_order_traversal(node->left, callback, user_data);
-    callback(node, user_data);
-    bst_in_order_traversal(node->right, callback, user_data);
+void bst_in_order_traversal(const bst_node_t* node, bst_callback_t callback, bst_iterator_ctx_t* ctx) {
+  if (node && callback && ctx->state == BST_ITERATION_IN_PROGRESS) {
+    bst_in_order_traversal(node->left, callback, ctx);
+    ctx->iterations++;
+    callback(node, ctx);
+    bst_in_order_traversal(node->right, callback, ctx);
   }
 }
 
@@ -19,11 +20,12 @@ void bst_in_order_traversal(const bst_node_t* node, bst_callback_t callback, voi
  * @param node The node to start the traversal from.
  * @param callback A callback function invoked for each node.
  */
-void bst_post_order_traversal(const bst_node_t* node, bst_callback_t callback, void* user_data) {
-  if (node) {
-    bst_post_order_traversal(node->left, callback, user_data);
-    bst_post_order_traversal(node->right, callback, user_data);
-    callback(node, user_data);
+void bst_post_order_traversal(const bst_node_t* node, bst_callback_t callback, bst_iterator_ctx_t* ctx) {
+  if (node && callback && ctx->state == BST_ITERATION_IN_PROGRESS) {
+    bst_post_order_traversal(node->left, callback, ctx);
+    bst_post_order_traversal(node->right, callback, ctx);
+    ctx->iterations++;
+    callback(node, ctx);
   }
 }
 
@@ -32,11 +34,12 @@ void bst_post_order_traversal(const bst_node_t* node, bst_callback_t callback, v
  * @param node The node to start the traversal from.
  * @param callback A callback function invoked for each node.
  */
-void bst_depth_first_traversal(const bst_node_t* node, bst_callback_t callback, void* user_data) {
-  if (node) {
-    callback(node, user_data);
-    bst_depth_first_traversal(node->left, callback, user_data);
-    bst_depth_first_traversal(node->right, callback, user_data);
+void bst_depth_first_traversal(const bst_node_t* node, bst_callback_t callback, bst_iterator_ctx_t* ctx) {
+  if (node && callback && ctx->state == BST_ITERATION_IN_PROGRESS) {
+    ctx->iterations++;
+    callback(node, ctx);
+    bst_depth_first_traversal(node->left, callback, ctx);
+    bst_depth_first_traversal(node->right, callback, ctx);
   }
 }
 
@@ -45,8 +48,8 @@ void bst_depth_first_traversal(const bst_node_t* node, bst_callback_t callback, 
  * @param node The node to start the traversal from.
  * @param callback A callback function invoked for each node.
  */
-void bst_breadth_first_traversal(const bst_node_t* node, bst_callback_t callback, void* user_data) {
-  if (node) {
+void bst_breadth_first_traversal(const bst_node_t* node, bst_callback_t callback, bst_iterator_ctx_t* ctx) {
+  if (node && callback && ctx->state == BST_ITERATION_IN_PROGRESS) {
     size_t queue_write_idx = node->tree->size - 1;
     size_t queue_read_idx  = queue_write_idx;
     size_t queue_size      = 0;
@@ -64,7 +67,8 @@ void bst_breadth_first_traversal(const bst_node_t* node, bst_callback_t callback
       queue_size--;
 
       /* Call the callback. */
-      callback(current, user_data);
+      ctx->iterations++;
+      callback(current, ctx);
 
       /* Enqueue the left child. */
       if (current->left) {
@@ -81,24 +85,25 @@ void bst_breadth_first_traversal(const bst_node_t* node, bst_callback_t callback
   }
 }
 
-void bst_search_traversal(const bst_node_t* node, bst_callback_t callback, void* user_data) {
-  bst_search_ctx_t* ctx = (bst_search_ctx_t*) user_data;
-
+void bst_search_traversal(const bst_node_t* node, bst_callback_t callback, bst_iterator_ctx_t* ctx) {
   /* Ensure that the node and the given data are valid. */
-  if (!node || !node->data || !ctx->data) {
+  if (!node || !node->data || !ctx->data || ctx->state != BST_ITERATION_IN_PROGRESS || !callback) {
     return;
   }
 
   /* Comparing the value associated with the nodes. */
   int result = node->tree->options.comparator(ctx->data, node->data);
 
+  /* Incrementing the iteration count. */
+  ctx->iterations++;
+  
   if (result < 0) {
-    callback(node, user_data);
-    bst_search_traversal(node->left, callback, user_data);
+    callback(node, ctx);
+    bst_search_traversal(node->left, callback, ctx);
   } else if (result > 0) {
-    callback(node, user_data);
-    bst_search_traversal(node->right, callback, user_data);
+    callback(node, ctx);
+    bst_search_traversal(node->right, callback, ctx);
   } else {
-    callback(node, user_data);
+    callback(node, ctx);
   }
 }

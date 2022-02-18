@@ -10,19 +10,38 @@ extern "C" {
 #include <string.h>
 
 /**
+ * @brief Defines the possible states for an
+ * iteration process.
+ */
+typedef enum bst_iteration_state_t {
+  BST_ITERATION_IN_PROGRESS,
+  BST_ITERATION_DONE,
+  BST_ITERATION_ERROR
+} bst_iteration_state_t;
+
+/**
+ * @brief A structure defining the context of an iterator
+ * traversing the tree.
+ */
+typedef struct bst_iterator_ctx_t {
+  const void* data;
+  size_t iterations;
+  bst_iteration_state_t state;
+} bst_iterator_ctx_t;
+
+/**
  * @brief Type definition for the comparator function
  * implementation used to compare nodes together.
  */
 typedef int (*bst_comparator_t)(const void*, const void*);
 
 /**
- * @brief Defines a type for iteration callback
- * return types.
+ * @brief Describes the options that can be passed to the
+ * binary-search tree.
  */
-typedef enum bst_callback_return_t {
-  BST_CALLBACK_CONTINUE,
-  BST_CALLBACK_STOP
-} bst_callback_return_t;
+typedef struct bst_options_t {
+  bst_comparator_t comparator;
+} bst_options_t;
 
 /**
  * @brief Describes the direction binding that can
@@ -32,14 +51,6 @@ typedef enum bst_direction_t {
   LEFT,
   RIGHT
 } bst_direction_t;
-
-/**
- * @brief Describes the options that can be passed to the
- * binary-search tree.
- */
-typedef struct bst_options_t {
-  bst_comparator_t comparator;
-} bst_options_t;
 
 /**
  * @brief Describes a binary-search tree node
@@ -63,25 +74,25 @@ typedef struct bst_tree_t {
   bst_options_t options;
 } bst_tree_t;
 
-typedef struct bst_search_ctx_t {
-  const void* data;
-  const bst_node_t* result;
-  size_t iterations;
-} bst_search_ctx_t;
+
+typedef struct bst_sort_result_t {
+  const bst_node_t** nodes;
+  size_t size;
+} bst_sort_result_t;
 
 /**
  * @brief Type definition for the callback function
  * implementation used to traverse the binary-search tree.
  * @param node the currently visited node.
  */
-typedef void (*bst_callback_t)(const bst_node_t* node, void* user_data);
+typedef void (*bst_callback_t)(const bst_node_t* node, bst_iterator_ctx_t* ctx);
 
 /**
  * @brief Type definition for the callback function
  * implementation used to traverse the binary-search tree.
  * @param node the starting node from which the traversal will start.
  */
-typedef void (*bst_traversal_strategy_t)(const bst_node_t* node, bst_callback_t callback, void* user_data);
+typedef void (*bst_traversal_strategy_t)(const bst_node_t* node, bst_callback_t callback, bst_iterator_ctx_t* ctx);
 
 /**
  * @brief Creates a new dynamically allocated binary-search tree instance.
@@ -96,10 +107,6 @@ bst_tree_t* bst_create(bst_options_t options);
  * @return a pointer to the newly created binary-search node
  */
 bst_node_t* bst_create_node(const void* data);
-
-bst_node_t* bst_attach_node(bst_node_t* node, bst_node_t* new_node, bst_direction_t direction);
-
-const bst_node_t* bst_insert_from(bst_node_t* root, bst_node_t* new_node);
 
 /**
  * @brief Inserts the given `data` in the binary-search tree.
@@ -228,12 +235,11 @@ const bst_node_t* bst_get_kth_smallest(const bst_tree_t* tree, size_t k);
 size_t bst_size(const bst_tree_t* tree);
 
 /**
- * @brief Iterates over the nodes of the binary-search tree using the given traversal strategy.
- * @param tree The tree to traverse.
- * @param callback A callback function invoked for each node.
- * @param strategy A strategy defining how to traverse the tree.
+ * @brief Sort the nodes in the tree in ascending order.
+ * @param tree the tree to sort.
+ * @return a structure `bst_data_t` containing the sorted nodes.
  */
-void bst_traverse_from(const bst_node_t* node, bst_callback_t callback, bst_traversal_strategy_t strategy, void* user_data);
+bst_sort_result_t bst_sort(bst_tree_t* tree);
 
 /**
  * @brief Iterates over the nodes of the binary-search tree using the given traversal strategy.
@@ -241,7 +247,7 @@ void bst_traverse_from(const bst_node_t* node, bst_callback_t callback, bst_trav
  * @param callback A callback function invoked for each node.
  * @param strategy A strategy defining how to traverse the tree.
  */
-void bst_traverse(const bst_tree_t* tree, bst_callback_t callback, bst_traversal_strategy_t strategy, void* user_data);
+bst_iterator_ctx_t bst_traverse_from(const bst_node_t* node, bst_callback_t callback, bst_traversal_strategy_t strategy, void* user_data);
 
 /**
  * @brief Iterates over the nodes of the binary-search tree using the given traversal strategy.
@@ -249,7 +255,15 @@ void bst_traverse(const bst_tree_t* tree, bst_callback_t callback, bst_traversal
  * @param callback A callback function invoked for each node.
  * @param strategy A strategy defining how to traverse the tree.
  */
-void bst_for_each(const bst_tree_t* tree, bst_callback_t callback, void* user_data);
+bst_iterator_ctx_t bst_traverse(const bst_tree_t* tree, bst_callback_t callback, bst_traversal_strategy_t strategy, void* user_data);
+
+/**
+ * @brief Iterates over the nodes of the binary-search tree using the given traversal strategy.
+ * @param tree The tree to traverse.
+ * @param callback A callback function invoked for each node.
+ * @param strategy A strategy defining how to traverse the tree.
+ */
+bst_iterator_ctx_t bst_for_each(const bst_tree_t* tree, bst_callback_t callback, void* user_data);
 
 /**
  * @brief A traversal strategy to traverse the binary-search tree in-order.
@@ -257,30 +271,30 @@ void bst_for_each(const bst_tree_t* tree, bst_callback_t callback, void* user_da
  * @param node The node to start the traversal from.
  * @param callback A callback function invoked for each node.
  */
-void bst_in_order_traversal(const bst_node_t* node, bst_callback_t callback, void* user_data);
+void bst_in_order_traversal(const bst_node_t* node, bst_callback_t callback, bst_iterator_ctx_t* ctx);
 
 /**
  * @brief A traversal strategy to traverse the binary-search tree post-order.
  * @param node The node to start the traversal from.
  * @param callback A callback function invoked for each node.
  */
-void bst_post_order_traversal(const bst_node_t* node, bst_callback_t callback, void* user_data);
+void bst_post_order_traversal(const bst_node_t* node, bst_callback_t callback, bst_iterator_ctx_t* ctx);
 
 /**
  * @brief A traversal strategy to traverse the binary-search tree in a depth-first manner.
  * @param node The node to start the traversal from.
  * @param callback A callback function invoked for each node.
  */
-void bst_depth_first_traversal(const bst_node_t* node, bst_callback_t callback, void* user_data);
+void bst_depth_first_traversal(const bst_node_t* node, bst_callback_t callback, bst_iterator_ctx_t* ctx);
 
 /**
  * @brief A traversal strategy to traverse the binary-search tree in a breadth-first manner.
  * @param node The node to start the traversal from.
  * @param callback A callback function invoked for each node.
  */
-void bst_breadth_first_traversal(const bst_node_t* node, bst_callback_t callback, void* user_data);
+void bst_breadth_first_traversal(const bst_node_t* node, bst_callback_t callback, bst_iterator_ctx_t* ctx);
 
-void bst_search_traversal(const bst_node_t* node, bst_callback_t callback, void* user_data);
+void bst_search_traversal(const bst_node_t* node, bst_callback_t callback, bst_iterator_ctx_t* ctx);
 
 /**
  * @brief A function implementation comparing the value of two nodes as integers.

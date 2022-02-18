@@ -1,6 +1,13 @@
 #include "binary_search_tree.h"
 
-bst_node_t* bst_attach_node(bst_node_t* node, bst_node_t* new_node, bst_direction_t direction) {
+/**
+ * @brief A helper function to attach a node to another node.
+ * @param node the node to attach the new node to.
+ * @param new_node the new node to attach.
+ * @param direction whether the new node should be attached to the left or right.
+ * @return a pointer to the newly attached node.
+ */
+static const bst_node_t* bst_attach_node(bst_node_t* node, bst_node_t* new_node, bst_direction_t direction) {
   if (direction == LEFT) {
     node->left = new_node;
   } else {
@@ -12,21 +19,26 @@ bst_node_t* bst_attach_node(bst_node_t* node, bst_node_t* new_node, bst_directio
   return (new_node);
 }
 
-const bst_node_t* bst_insert_from(bst_node_t* root, bst_node_t* new_node) {
-  bst_tree_t* tree = root->tree;
-  int result       = tree->options.comparator(new_node->data, root->data);
+/**
+ * @brief Inserts a new node into the given subtree.
+ * @param node the root of the subtree to insert the node into.
+ * @param new_node the new node to insert.
+ * @return a pointer to the newly inserted node.
+ */
+static const bst_node_t* bst_insert_from(bst_node_t* node, bst_node_t* new_node) {
+  int result = node->tree->options.comparator(new_node->data, node->data);
 
   if (result < 0) {
-    if (root->left) {
-      return (bst_insert_from(root->left, new_node));
+    if (node->left) {
+      return (bst_insert_from(node->left, new_node));
     } else {
-      return (bst_attach_node(root, new_node, LEFT));
+      return (bst_attach_node(node, new_node, LEFT));
     }
   } else if (result > 0) {
-    if (root->right) {
-      return (bst_insert_from(root->right, new_node));
+    if (node->right) {
+      return (bst_insert_from(node->right, new_node));
     } else {
-      return (bst_attach_node(root, new_node, RIGHT));
+      return (bst_attach_node(node, new_node, RIGHT));
     }
   } else {
     return (NULL);

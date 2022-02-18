@@ -31,12 +31,10 @@ struct context_t {
  * @param node the currently visited node.
  * @param data a pointer to the user-defined data.
  */
-static void default_traversal_callback(const bst_node_t* node, void* data) {
+void default_traversal_callback(const bst_node_t* node, bst_iterator_ctx_t* ctx) {
   if (!node) {
     assert("Node is NULL");
   }
-  int* counter = (int*) data;
-  (*counter)++;
 }
 
 /**
@@ -44,11 +42,11 @@ static void default_traversal_callback(const bst_node_t* node, void* data) {
  * @param node the currently visited node.
  * @param data a pointer to the user-defined data.
  */
-static void ordered_traversal_callback(const bst_node_t* node, void* data) {
+void ordered_traversal_callback(const bst_node_t* node, bst_iterator_ctx_t* ctx) {
   if (!node) {
     assert("Node is NULL");
   }
-  context_t* context = (context_t*) data;
+  context_t* context = (context_t*) ctx->data;
   context->nodes[context->iterations++] = node;
 }
 
@@ -68,8 +66,6 @@ static bool is_sorted(const bst_node_t* array[], size_t size) {
 }
 
 TEST(ITERATION, DEFAULT_TRAVERSAL) {
-  size_t n = 0;
-
   // Creating a new binary search tree.
   bst_tree_t* tree = bst_create((bst_options_t) {
     .comparator = &bst_integer_comparator
@@ -80,17 +76,16 @@ TEST(ITERATION, DEFAULT_TRAVERSAL) {
     bst_insert(tree, &data[i]);
 
   // Iterating over the nodes.
-  bst_for_each(tree, default_traversal_callback, &n);
+  bst_iterator_ctx_t ctx = bst_for_each(tree, &default_traversal_callback, NULL);
 
   // The number of iterations must be equal to the number of nodes.
-  EXPECT_EQ(n, ARRAY_SIZE(data));
+  EXPECT_EQ(ctx.iterations, ARRAY_SIZE(data));
 
   bst_destroy(tree);
 }
 
 TEST(ITERATION, IN_ORDER_TRAVERSAL) {
   context_t context_tree    = {};
-  context_t context_subtree = {};
 
   // Creating a new binary search tree.
   bst_tree_t* tree = bst_create((bst_options_t) {
@@ -102,14 +97,10 @@ TEST(ITERATION, IN_ORDER_TRAVERSAL) {
     bst_insert(tree, &data[i]);
 
   // Iterating over the tree.
-  bst_traverse(tree, ordered_traversal_callback, &bst_in_order_traversal, &context_tree);
-  EXPECT_EQ(context_tree.iterations, ARRAY_SIZE(data));
+  bst_iterator_ctx_t ctx = bst_traverse(tree, &ordered_traversal_callback, &bst_in_order_traversal, &context_tree);
+  EXPECT_EQ(ctx.iterations, ARRAY_SIZE(data));
+  EXPECT_EQ(context_tree.iterations, ctx.iterations);
   EXPECT_TRUE(is_sorted(context_tree.nodes, context_tree.iterations));
-
-  // Iterating over the subtree.
-  bst_traverse_from(tree->root->right, ordered_traversal_callback, &bst_in_order_traversal, &context_subtree);
-  EXPECT_EQ(context_subtree.iterations, 4);
-  EXPECT_TRUE(is_sorted(context_subtree.nodes, context_subtree.iterations));
 
   bst_destroy(tree);
 }
@@ -129,10 +120,11 @@ TEST(ITERATION, POST_ORDER_TRAVERSAL) {
     bst_insert(tree, &data[i]);
 
   // Iterating over the nodes.
-  bst_traverse(tree, ordered_traversal_callback, &bst_post_order_traversal, &context);
+  bst_iterator_ctx_t ctx = bst_traverse(tree, &ordered_traversal_callback, &bst_post_order_traversal, &context);
 
   // The number of iterations must be equal to the number of nodes.
   EXPECT_EQ(context.iterations, ARRAY_SIZE(data));
+  EXPECT_EQ(context.iterations, ctx.iterations);
   
   // Comparing the results.
   for (size_t i = 0; i < context.iterations; ++i) {
@@ -158,10 +150,11 @@ TEST(ITERATION, DEPTH_FIRST_TRAVERSAL) {
     bst_insert(tree, &data[i]);
 
   // Iterating over the nodes.
-  bst_traverse(tree, ordered_traversal_callback, &bst_depth_first_traversal, &context);
+  bst_iterator_ctx_t ctx = bst_traverse(tree, &ordered_traversal_callback, &bst_depth_first_traversal, &context);
 
   // The number of iterations must be equal to the number of nodes.
   EXPECT_EQ(context.iterations, ARRAY_SIZE(data));
+  EXPECT_EQ(context.iterations, ctx.iterations);
   
   // Comparing the results.
   for (size_t i = 0; i < context.iterations; ++i) {
@@ -187,10 +180,11 @@ TEST(ITERATION, BREADTH_FIRST_TRAVERSAL) {
     bst_insert(tree, &data[i]);
 
   // Iterating over the nodes.
-  bst_traverse(tree, ordered_traversal_callback, &bst_breadth_first_traversal, &context);
+  bst_iterator_ctx_t ctx = bst_traverse(tree, &ordered_traversal_callback, &bst_breadth_first_traversal, &context);
 
   // The number of iterations must be equal to the number of nodes.
   EXPECT_EQ(context.iterations, ARRAY_SIZE(data));
+  EXPECT_EQ(context.iterations, ctx.iterations);
   
   // Comparing the results.
   for (size_t i = 0; i < context.iterations; ++i) {

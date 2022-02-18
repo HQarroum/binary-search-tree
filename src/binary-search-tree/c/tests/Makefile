@@ -1,18 +1,29 @@
-CXX = g++
+CXX ?= g++
 
+# Whether to enable coverage.
+COVERAGE ?= false
+
+# Name of the binary.
 APP = launch_tests
 
-SRC = main.cpp \
-	unit_test_insertion_int.cpp \
-	unit_test_insertion_string.cpp \
-	unit_test_initialization.cpp \
-	unit_test_search.cpp \
-	unit_test_iteration.cpp \
-	unit_test_deletion.cpp
+# Source files.
+SRC = $(wildcard ./*.cpp) $(wildcard ../*.c)
 
-CXXFLAGS = -std=c++11 -W -Wall -fprofile-arcs -ftest-coverage
+# Default flags.
+CXXFLAGS = -std=c++11 -W -Wall -g3
 
-LDFLAGS = -lgtest -lpthread -lgcov -L../ -lbst
+# Conditionally enable coverage for the compiler.
+ifeq ($(COVERAGE),true)
+CFLAGS += -fprofile-arcs -ftest-coverage
+endif
+
+# Default linker flags.
+LDFLAGS = -lgtest -lpthread #-L../ -lbst
+
+# Conditionally enable coverage for the linker.
+ifeq ($(COVERAGE),true)
+LDFLAGS += -lgcov --coverage 
+endif
 
 OBJ = $(SRC:.c=.o)
 

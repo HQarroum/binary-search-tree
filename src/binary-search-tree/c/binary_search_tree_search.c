@@ -107,7 +107,11 @@ static const bst_node_t* bst_get_kth_number_from(const bst_node_t* node, size_t*
   }
 
   /* Iterating until we reach the largest value. */
-  const bst_node_t* result = bst_get_kth_number_from(direction == RIGHT ? node->right : node->left, k, direction);
+  const bst_node_t* result = bst_get_kth_number_from(direction == RIGHT ?
+    node->right : node->left,
+    k,
+    direction
+  );
 
   /* If the kth largest value is in the right subtree,
    * return the node associated with the kth largest value. */
@@ -125,7 +129,11 @@ static const bst_node_t* bst_get_kth_number_from(const bst_node_t* node, size_t*
   }
 
   /* Iterating left-right to traverse all nodes. */
-  return (bst_get_kth_number_from(direction == RIGHT ? node->left : node->right, k, direction));
+  return (bst_get_kth_number_from(direction == RIGHT ?
+    node->left : node->right,
+    k,
+    direction
+  ));
 }
 
 /**
