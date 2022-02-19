@@ -17,6 +17,21 @@
 static const int data[] = { 50, 70, 60, 20, 90, 10, 40, 100 };
 
 /**
+ * @brief A callback used to find the node with the given data.
+ * @param node the currently visited node.
+ * @param ctx the iterator context.
+ */
+static void search_iterator_callback(const bst_node_t* node, bst_iterator_ctx_t* ctx) {
+  const int node_data = *(static_cast<const int*>(node->data));
+  const int ctx_data  = *(static_cast<const int*>(ctx->data));
+
+  if (node_data == ctx_data) {
+    ctx->data = &node_data;
+    ctx->state = BST_ITERATION_DONE;
+  }
+}
+
+/**
  * @brief A structure defining the number
  * of iterations performed as well as the iterated nodes
  * in the order in which they were traversed.
@@ -31,7 +46,7 @@ struct context_t {
  * @param node the currently visited node.
  * @param data a pointer to the user-defined data.
  */
-void default_traversal_callback(const bst_node_t* node, bst_iterator_ctx_t* ctx) {
+void default_traversal_callback(const bst_node_t* node, __attribute((unused)) bst_iterator_ctx_t* ctx) {
   if (!node) {
     assert("Node is NULL");
   }
@@ -191,6 +206,28 @@ TEST(ITERATION, BREADTH_FIRST_TRAVERSAL) {
     const int* value = static_cast<const int*>(context.nodes[i]->data);
     EXPECT_EQ(*value, expected[i]);
   }
+
+  bst_destroy(tree);
+}
+
+TEST(ITERATION, SEARCH_TRAVERSAL) {
+  int number = 60;
+
+  // Creating a new binary search tree.
+  bst_tree_t* tree = bst_create((bst_options_t) {
+    .comparator = &bst_integer_comparator
+  });
+
+  // Inserting the data.
+  for (size_t i = 0; i < ARRAY_SIZE(data); ++i)
+    bst_insert(tree, &data[i]);
+
+  // Iterating over the nodes.
+  bst_iterator_ctx_t ctx = bst_traverse(tree, &search_iterator_callback, &bst_search_traversal, &number);
+
+  // The number of iterations must be equal to the number of nodes.
+  EXPECT_EQ(ctx.iterations, 3);
+  EXPECT_EQ(*static_cast<const int*>(ctx.data), data[2]);
 
   bst_destroy(tree);
 }

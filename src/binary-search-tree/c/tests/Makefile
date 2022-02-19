@@ -7,10 +7,10 @@ COVERAGE ?= false
 APP = launch_tests
 
 # Source files.
-SRC = $(wildcard ./*.cpp) $(wildcard ../*.c)
+SRC = $(wildcard ./*.cpp)
 
 # Default flags.
-CXXFLAGS = -std=c++11 -W -Wall -g3
+CXXFLAGS = -std=c++11 -W -Wall -Werror
 
 # Conditionally enable coverage for the compiler.
 ifeq ($(COVERAGE),true)
@@ -18,7 +18,7 @@ CFLAGS += -fprofile-arcs -ftest-coverage
 endif
 
 # Default linker flags.
-LDFLAGS = -lgtest -lpthread #-L../ -lbst
+LDFLAGS = -lgtest -lpthread -L../ -lbst
 
 # Conditionally enable coverage for the linker.
 ifeq ($(COVERAGE),true)
