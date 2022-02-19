@@ -44,6 +44,7 @@ static const bst_node_t* bst_insert_from(bst_node_t* node, bst_node_t* new_node)
     return (NULL);
   }
 }
+
 /**
  * @brief Inserts the given `data` in the binary-search tree.
  * @param tree a pointer to the binary-search tree.
