@@ -25,6 +25,7 @@ coverage
 *.gcno
 *.so
 *.a
+*.o
 *.gcda
 *.info
 
@@ -108,3 +109,6 @@ dist
 
 # TernJS port file
 .tern-port
+
+# Python
+__pycache__

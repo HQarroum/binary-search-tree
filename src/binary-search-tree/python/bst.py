@@ -4,7 +4,9 @@ from node import Node
 from iterators.dfs import DepthFirstIterator
 from iterators.bfs import BreadthFirstIterator
 
-# A binary-search tree.
+# A binary-search tree is a rooted binary tree data structure
+# whose internal nodes each store a key greater than all the keys
+# in the node's left subtree and less than those in its right subtree.
 class BinarySearchTree:
 
   def __init__(self, **options) -> None:
