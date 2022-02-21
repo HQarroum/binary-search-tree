@@ -1,4 +1,4 @@
-#include "binary_search_tree.h"
+#include <binary_search_tree.h>
 
 /**
  * @brief Removes the node associated with the given `data` from the binary-search tree

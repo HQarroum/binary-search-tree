@@ -1,4 +1,4 @@
-#include "../binary_search_tree.h"
+#include <binary_search_tree.h>
 #include <gtest/gtest.h>
 #include <stdint.h>
 #include <algorithm>
@@ -226,7 +226,7 @@ TEST(ITERATION, SEARCH_TRAVERSAL) {
   bst_iterator_ctx_t ctx = bst_traverse(tree, &search_iterator_callback, &bst_search_traversal, &number);
 
   // The number of iterations must be equal to the number of nodes.
-  EXPECT_EQ(ctx.iterations, 3);
+  EXPECT_EQ(ctx.iterations, (size_t) 3);
   EXPECT_EQ(*static_cast<const int*>(ctx.data), data[2]);
 
   bst_destroy(tree);

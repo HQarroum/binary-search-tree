@@ -1,4 +1,4 @@
-#include "binary_search_tree.h"
+#include <binary_search_tree.h>
 
 /**
  * @brief A helper function to attach a node to another node.
@@ -41,7 +41,7 @@ static const bst_node_t* bst_insert_from(bst_node_t* node, bst_node_t* new_node)
       return (bst_attach_node(node, new_node, RIGHT));
     }
   } else {
-    return (NULL);
+    return (node);
   }
 }
 

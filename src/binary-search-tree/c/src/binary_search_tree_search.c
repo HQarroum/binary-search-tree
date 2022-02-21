@@ -1,4 +1,4 @@
-#include "binary_search_tree.h"
+#include <binary_search_tree.h>
 
 /**
  * @brief Recursively traverse the subtree to find

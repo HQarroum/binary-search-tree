@@ -1,4 +1,4 @@
-#include "binary_search_tree.h"
+#include <binary_search_tree.h>
 
 /**
  * @brief A traversal strategy to traverse the binary-search tree in-order.

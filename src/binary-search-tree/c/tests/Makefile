@@ -10,7 +10,7 @@ APP = launch_tests
 SRC = $(wildcard ./*.cpp)
 
 # Default flags.
-CXXFLAGS = -std=c++11 -W -Wall -Werror
+CXXFLAGS = -std=c++11 -W -Wall -Werror -I../include
 
 # Conditionally enable coverage for the compiler.
 ifeq ($(COVERAGE),true)

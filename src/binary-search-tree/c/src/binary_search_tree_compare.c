@@ -1,4 +1,4 @@
-#include "binary_search_tree.h"
+#include <binary_search_tree.h>
 
 /**
  * @brief A function implementation comparing the value of two nodes as integers.

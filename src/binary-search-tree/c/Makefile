@@ -13,10 +13,10 @@ LIB_SHARED_NAME = lib$(LIB_NAME).so
 LIB_STATIC_NAME = lib$(LIB_NAME).a
 
 # Source files.
-SRC = $(wildcard ./*.c)
+SRC = $(wildcard ./src/*.c)
 
 # Default flags.
-CFLAGS = -std=c99 -W -Wall -Werror -ansi -fPIC -g3
+CFLAGS = -std=c99 -W -Wall -Werror -ansi -fPIC -g3 -I./include
 
 # Conditionally enable coverage for the compiler.
 ifeq ($(COVERAGE),true)
@@ -43,16 +43,19 @@ all: $(OBJ)
 gcov: $(OBJ)
 	gcov $(OBJ)
 
+tests:
+	make -C tests/
+
 re: fclean all
 
 clean:
 	$(shell find . -name '*~' -exec rm -r {} \; -o -name '*.o' -exec rm -r {} \;)
 
 fclean: clean
-	rm -f $(LIB_SHARED_NAME) $(LIB_STATIC_NAME)
-	rm -f *.gcno
-	rm -f *.gcda
-	rm -f *.info
-	rm -f *.gcov
+	rm -rf $(LIB_SHARED_NAME) $(LIB_STATIC_NAME)
+	rm -rf src/*.gcno
+	rm -rf src/*.gcda
+	rm -rf src/*.info
+	rm -rf src/*.gcov
 
 .PHONY: clean fclean re

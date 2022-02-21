@@ -1,4 +1,4 @@
-#include "binary_search_tree.h"
+#include <binary_search_tree.h>
 
 /**
  * @brief Iterates over the nodes of the binary-search tree using the given traversal strategy.

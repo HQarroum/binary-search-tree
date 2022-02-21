@@ -1,4 +1,4 @@
-#include "../binary_search_tree.h"
+#include <binary_search_tree.h>
 #include <gtest/gtest.h>
 #include <stdint.h>
 
@@ -12,7 +12,7 @@ TEST(INITIALIZATION, OF_TREE) {
 
   EXPECT_NE(tree, nullptr);
   EXPECT_EQ(tree->root, nullptr);
-  EXPECT_EQ(tree->size, 0);
+  EXPECT_EQ(tree->size, (size_t) 0);
   EXPECT_EQ(tree->options.comparator, &bst_integer_comparator);
 
   // Destroying the tree.

@@ -1,4 +1,4 @@
-#include "../binary_search_tree.h"
+#include <binary_search_tree.h>
 #include <gtest/gtest.h>
 #include <stdint.h>
 
@@ -119,7 +119,7 @@ TEST(DELETION, OF_ALL_NODES) {
   }
 
   bst_clear(tree);
-  EXPECT_EQ(bst_size(tree), 0);
+  EXPECT_EQ(bst_size(tree), (size_t) 0);
   EXPECT_EQ(tree->root, (bst_node_t*) NULL);
 
   // Destroying the tree.
@@ -145,7 +145,7 @@ TEST(DELETION, OF_ALL_NODES_IN_SUBTREE) {
   /**                                                                    */
   /**                                                                    */
   bst_clear_from(tree->root->right);
-  EXPECT_EQ(bst_size(tree), 4);
+  EXPECT_EQ(bst_size(tree), (size_t) 4);
 
   // Destroying the tree.
   bst_destroy(tree);

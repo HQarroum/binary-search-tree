@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 4.1.3 (Python 3.8.0 on darwin)" generated="20220220 01:45:32.022" rpa="false" schemaversion="2">
+<suite id="s1" name="Bst" source="/Users/qarroumh/Documents/Github/a-world-of-trees/src/binary-search-tree/python/bst.robot">
+<test id="s1-t1" name="Initialization of the BST">
+<kw name="Get Binary Search Tree Size" library="bst">
+<kw name="size">
+<msg timestamp="20220220 01:45:32.053" level="FAIL">No keyword with name 'size' found.</msg>
+<status status="FAIL" starttime="20220220 01:45:32.053" endtime="20220220 01:45:32.053"/>
+</kw>
+<status status="FAIL" starttime="20220220 01:45:32.051" endtime="20220220 01:45:32.054"/>
+</kw>
+<status status="FAIL" starttime="20220220 01:45:32.051" endtime="20220220 01:45:32.054">No keyword with name 'size' found.</status>
+</test>
+<doc>In this file we list the different acceptance tests for the binary-search tree implementation.</doc>
+<status status="FAIL" starttime="20220220 01:45:32.024" endtime="20220220 01:45:32.054"/>
+</suite>
+<statistics>
+<total>
+<stat pass="0" fail="1" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="0" fail="1" skip="0" id="s1" name="Bst">Bst</stat>
+</suite>
+</statistics>
+<errors>
+<msg timestamp="20220220 01:45:32.048" level="WARN">Imported library '/Users/qarroumh/Documents/Github/a-world-of-trees/src/binary-search-tree/python/bst.py' contains no keywords.</msg>
+<msg timestamp="20220220 01:45:32.050" level="ERROR">Error in file '/Users/qarroumh/Documents/Github/a-world-of-trees/src/binary-search-tree/python/bst.resource' on line 3: Replacing variables from setting 'Library' failed: Variable '${foo}' not found.</msg>
+</errors>
+</robot>
