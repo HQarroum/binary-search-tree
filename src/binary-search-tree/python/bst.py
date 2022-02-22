@@ -3,6 +3,8 @@ from typing import Iterator, overload
 from node import Node
 from iterators.dfs import DepthFirstIterator
 from iterators.bfs import BreadthFirstIterator
+from iterators.inorder import InOrderIterator
+from iterators.postorder import PostOrderIterator
 
 # A binary-search tree is a rooted binary tree data structure
 # whose internal nodes each store a key greater than all the keys
@@ -83,117 +85,105 @@ class BinarySearchTree:
     self.size += 1
     return new_node
 
-  def find(self, data):
-    """
-    A helper function to find the node associated with `data`
-    in the binary-search tree.
-    :param data: The data used to return the associated node from the binary-search tree.
-    """
-    return self.find_in(self.root, data)
-
-  def find_in(self, node, data):
+  def find(self, **kwargs):
     """
     A helper function to find the node associated with `data`
     in the given subtree.
     :param node: The root of the subtree to search in.
     :param data: The data used to return the associated node from the binary-search tree.
     """
+    node = kwargs.get('subtree', self.root)
+    data = kwargs.get('data')
+
     if not node or node.data == data:
       return node
     
     # Compare the data to find with the current node's data.
     result = self.comparator(data, node.data)
 
-    # Recursively search the tree.
-    return self.find_in(node.left if result < 0 else node.right, data)
+    # If the data is less than the current node's data,
+    # we search in the left subtree. Otherwise, we search
+    # in the right subtree.
+    node = node.left if result < 0 else node.right
 
-  def min(self):
-    """
-    Computes the node with the smallest value in the binary-search tree.
-    """
-    return self.min_in(self.root)
-  
-  def min_in(self, node):
+    # Recursively search the tree.
+    return self.find(subtree=node, data=data)
+
+  def min(self, **kwargs):
     """
     Computes the node with the smallest value in the given subtree.
     :param node: The root of the subtree to search in.
     """
+    node = kwargs.get('subtree', self.root)
     if not node or not node.left:
       return node
-    return self.min_in(node.left)
+    return self.min(subtree=node.left)
 
-  def max(self):
-    """
-    Computes the node with the largest value in the binary-search tree.
-    """
-    return self.max_in(self.root)
-
-  def max_in(self, node):
+  def max(self, **kwargs):
     """
     Computes the node with the largest value in the given subtree.
     :param node: The root of the subtree to search in.
     """
+    node = kwargs.get('subtree', self.root)
     if not node or not node.right:
       return node
-    return self.max_in(node.right)
+    return self.max(subtree=node.right)
 
-  def sort(self):
+  def sort(self, **kwargs) -> list:
     """
     Sorts the binary-search tree in ascending order.
-    """
-    return self.sort_in(self.root)
-
-  def sort_in(self, node):
-    """
-    Sorts the given subtree in ascending order.
     :param node: The root of the subtree to sort.
     """
-    if not node:
-      return []
-    return self.sort_in(node.left) + [node.data] + self.sort_in(node.right)
+    return list(map(lambda n: n.data, InOrderIterator(self, kwargs.get('subtree', self.root)).array()))
 
-  def kth_smallest(self, k):
-    """
-    Computes the kth smallest value in the binary-search tree.
-    :param k: The kth smallest value in the binary-search tree.
-    """
-    return self.kth_smallest_in(self.root, k)
-  
-  def kth_smallest_in(self, node, k):
+  def kth_number(self, **kwargs):
+    k = kwargs['k']
+    num = kwargs.get('direction', 'smallest')
+
+    def get(node):
+      nonlocal k
+
+      # If the node is null, the kth smallest value does not exist
+      # in the binary-search tree.
+      if not node:
+        return None
+      
+      # Finding the most left-wise node.
+      result = get(node.left if num == 'smallest' else node.right)
+
+      # If the kth smallest value has been found,
+      # we return it.
+      if result:
+        return result
+
+      # Decrementing k for each node visited
+      # after the most
+      k -= 1
+
+      # If k is equal to 1, we return the current node
+      # as we consider it the kth smallest.
+      if k == 0:
+        return node
+
+      return get(node.right if num == 'smallest' else node.left)
+    return get(kwargs.get('subtree', self.root))
+
+  def kth_smallest(self, **kwargs):
     """
     Computes the kth smallest value in the given subtree.
-    :param node: The root of the subtree to search in.
     :param k: The kth smallest value in the binary-search tree.
+    :param node: The root of the subtree to search in.
     """
-    if not node:
-      return None
-    if k == 1:
-      return node.data
-    if k > 1:
-      return self.kth_smallest_in(node.left, k - 1)
-    return self.kth_smallest_in(node.right, k - 1)
+    return self.kth_number(**kwargs, direction='smallest')
   
-  def kth_largest(self, k):
-    """
-    Computes the kth largest value in the binary-search tree.
-    :param k: The kth largest value in the binary-search tree.
-    """
-    return self.kth_largest_in(self.root, k)
-
-  def kth_largest_in(self, node, k):
+  def kth_largest(self, **kwargs):
     """
     Computes the kth largest value in the given subtree.
-    :param node: The root of the subtree to search in.
     :param k: The kth largest value in the binary-search tree.
+    :param node: The root of the subtree to search in.
     """
-    if not node:
-      return node
-    if k == 1:
-      return node.data
-    if k > 1:
-      return self.kth_largest_in(node.right, k - 1)
-    return self.kth_largest_in(node.left, k - 1)
-  
+    return self.kth_number(**kwargs, direction='largest')
+
   def remove(self, data):
     """
     Removes the node associated with `data` from the binary-search tree.
@@ -238,34 +228,45 @@ class BinarySearchTree:
         node.data = successor.data
         node.right = self.__remove_node(node.right, successor.data)
 
-  def nodes(self) -> list:
-    """
-    Returns a list of all the nodes in the binary-search tree.
-    """
-    return self.nodes_in(self.root)
-
-  def nodes_in(self, node) -> list:
+  def nodes(self, **kwargs) -> list:
     """
     Returns a list of all the nodes in the given subtree.
     :param node: The root of the subtree to search in.
     """
-    return self.dfs_iterator_from(self, node).array()
+    return self.dfs_iterator_from(self, kwargs.get('subtree', self.root)).array()
 
-  def dfs_iterator(self) -> Iterator:
-    return self.dfs_iterator_from(self.root)
+  def dfs_iterator(self, **kwargs) -> Iterator:
+    """
+    Returns an iterator that traverses the given subtree in depth-first order.
+    :param node: The root of the subtree to search in.
+    """
+    return (iter(DepthFirstIterator(self, kwargs.get('subtree', self.root))))
 
-  def dfs_iterator_from(self, node) -> Iterator:
-    return (iter(DepthFirstIterator(self, node)))
+  def bfs_iterator(self, **kwargs) -> Iterator:
+    """
+    Returns an iterator that traverses the given subtree in breadth-first order.
+    :param node: The root of the subtree to search in.
+    """
+    return (iter(BreadthFirstIterator(self, kwargs.get('subtree', self.root))))
 
-  def bfs_iterator(self) -> Iterator:
-    return self.bfs_iterator_from(self.root)
+  def in_order_iterator(self, **kwargs) -> Iterator:
+    """
+    Returns an iterator that traverses the given subtree in-order.
+    :param node: The root of the subtree to search in.
+    """
+    return (iter(InOrderIterator(self, kwargs.get('subtree', self.root))))
 
-  def bfs_iterator_from(self, node) -> Iterator:
-    return (iter(BreadthFirstIterator(self, node)))
+  def post_order_iterator(self, **kwargs) -> Iterator:
+    """
+    Returns an iterator that traverses the given subtree in post-order.
+    :param node: The root of the subtree to search in.
+    """
+    return (iter(PostOrderIterator(self, kwargs.get('subtree', self.root))))
 
   def __iter__(self) -> Iterator:
     """
     Returns an iterator over the nodes in the binary-search tree.
+    The default iterator for the binary-search tree is the depth-first search iterator.
     """
     return self.dfs_iterator()
 

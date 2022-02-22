@@ -128,7 +128,7 @@ static const bst_node_t* bst_get_kth_number_from(const bst_node_t* node, size_t*
     return (node);
   }
 
-  /* Iterating left-right to traverse all nodes. */
+  /* Iterating over the opposite subtree to traverse all nodes. */
   return (bst_get_kth_number_from(direction == RIGHT ?
     node->left : node->right,
     k,
