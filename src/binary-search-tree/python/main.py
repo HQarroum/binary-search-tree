@@ -14,4 +14,3 @@ if __name__ == '__main__':
 
   print(str(bst))
   print(bst.kth_largest(k=1).data)
-  #print(list(map(lambda n: n.data, bst.depth_first())))
