@@ -1,4 +1,3 @@
-from array import array
 from typing import Iterator, overload
 from node import Node
 from iterators.dfs import DepthFirstIterator
@@ -197,8 +196,8 @@ class BinarySearchTree:
     from the given subtree.
     :param node: The node to remove from the binary-search tree.
     """
-    if not node:
-      return node
+    if not node or not data:
+      return None
 
     # Comparing the given data to the current node's data.
     result = self.comparator(data, node.data)
@@ -208,15 +207,15 @@ class BinarySearchTree:
     elif result > 0:
       node.right = self.__remove_node(node.right, data)
     else:
-      # The node doesn't have any children.
-      if node.left and node.right:
+      # The node has one child.
+      if not node.left and not node.right:
         if self.root == node:
           self.root = None
         self.size -= 1
         return None
       # The node has a single child.
-      elif node.left or node.right:
-        successor = node.left if node.left else node.right
+      elif not node.left or not node.right:
+        successor = node.right if node.right else node.left
         successor.parent = node.parent
         if self.root == node:
           self.root = successor
@@ -224,9 +223,11 @@ class BinarySearchTree:
         return successor
       # The node has two children.
       else:
-        successor = self.min_in(node.right)
+        successor = self.min(subtree=node.right)
         node.data = successor.data
         node.right = self.__remove_node(node.right, successor.data)
+
+    return node
 
   def nodes(self, **kwargs) -> list:
     """
