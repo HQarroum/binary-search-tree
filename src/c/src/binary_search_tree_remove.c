@@ -66,16 +66,16 @@ bst_node_t* bst_remove(bst_tree_t* tree, const void* data) {
  */
 void bst_clear_from(bst_node_t* node) {
   if (!node) return;
+
+  /* Recursively clear the left subtree. */
   bst_clear_from(node->left);
   bst_clear_from(node->right);
 
   /* Detaching the node from its parent. */
-  if (node->parent) {
-    if (node->parent->left == node)
-      node->parent->left = NULL;
-    if (node->parent->right == node)
-      node->parent->right = NULL;
-  }
+  if (node->parent && node->parent->left == node)
+    node->parent->left = NULL;
+  if (node->parent && node->parent->right == node)
+    node->parent->right = NULL;
 
   /* Decremeneting the size of the tree. */
   node->tree->size--;

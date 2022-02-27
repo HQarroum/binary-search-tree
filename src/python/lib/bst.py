@@ -1,4 +1,4 @@
-from typing import Iterator, overload
+from typing import Iterator
 from node import Node
 from iterators.dfs import DepthFirstIterator
 from iterators.bfs import BreadthFirstIterator

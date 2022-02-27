@@ -7,6 +7,7 @@
  * @param data the data to find in the given subtree.
  * @return a pointer to the found node, or NULL if the node
  * was not found.
+ * @note Complexity is O(log(n)) on average, O(n) in the worst case.
  */
 const bst_node_t* bst_find_in(const bst_node_t* node, const void* data) {
   /* Ensure that the node and the given data are valid. */
@@ -27,13 +28,13 @@ const bst_node_t* bst_find_in(const bst_node_t* node, const void* data) {
 }
 
 /**
- * @brief A helper function to find the node associated with `data`
- * a binary-search tree.
+ * @brief A function to find the node associated with `data`
+ * in a binary-search tree.
  * @param tree a pointer to the tree to look up the data in
  * @param data a pointer to the data to look up
  * @return a pointer to the node containing the data, or NULL if the node
  * was not found.
- * @note Complexity is O(log(n)) on average, O(n) on the worst case.
+ * @note Complexity is O(log(n)) on average, O(n) in the worst case.
  */
 const bst_node_t* bst_find(const bst_tree_t* tree, const void* data) {
   if (!tree || !tree->root || !data) {
@@ -71,7 +72,7 @@ const bst_node_t* bst_get_min(const bst_tree_t* tree) {
  * the node associated with the biggest value.
  * @param node the node to start the traversal from.
  * @return a pointer to the node associated with the biggest value.
-  * @note Complexity is O(log(n)) on average, O(n) on the worst case.
+ * @note Complexity is O(log(n)) on average, O(n) on the worst case.
  */
 const bst_node_t* bst_get_max_from(const bst_node_t* node) {
   while (node->right != NULL)
@@ -84,7 +85,7 @@ const bst_node_t* bst_get_max_from(const bst_node_t* node) {
  * the node associated with the biggest value.
  * @param tree the tree to look up the biggest value in.
  * @return a pointer to the node associated with the biggest value.
-  * @note Complexity is O(log(n)) on average, O(n) on the worst case.
+ * @note Complexity is O(log(n)) on average, O(n) on the worst case.
  */
 const bst_node_t* bst_get_max(const bst_tree_t* tree) {
   return (bst_get_max_from(tree->root));

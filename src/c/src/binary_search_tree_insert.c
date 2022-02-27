@@ -6,6 +6,7 @@
  * @param new_node the new node to attach.
  * @param direction whether the new node should be attached to the left or right.
  * @return a pointer to the newly attached node.
+ * @note Complexity is O(log(n)) on average, O(n) on the worst case.
  */
 static const bst_node_t* bst_attach_node(bst_node_t* node, bst_node_t* new_node, bst_direction_t direction) {
   if (direction == LEFT) {
@@ -24,6 +25,7 @@ static const bst_node_t* bst_attach_node(bst_node_t* node, bst_node_t* new_node,
  * @param node the root of the subtree to insert the node into.
  * @param new_node the new node to insert.
  * @return a pointer to the newly inserted node.
+ * @note Complexity is O(log(n)) on average, O(n) on the worst case.
  */
 static const bst_node_t* bst_insert_from(bst_node_t* node, bst_node_t* new_node) {
   int result = node->tree->options.comparator(new_node->data, node->data);
@@ -50,6 +52,7 @@ static const bst_node_t* bst_insert_from(bst_node_t* node, bst_node_t* new_node)
  * @param tree a pointer to the binary-search tree.
  * @param data a pointer to the data to insert in the binary-search tree.
  * @return a pointer to the created node that wraps the pointer to the given data.
+ * @note Complexity is O(log(n)) on average, O(n) on the worst case.
  */
 const bst_node_t* bst_insert(bst_tree_t* tree, const void* data) {
   bst_node_t* node = bst_create_node(data);
