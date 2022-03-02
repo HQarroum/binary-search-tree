@@ -80,7 +80,12 @@ int main(void) {
   string_tree.insert("abc", "aaa", "bbb", "ab");
   double_tree.insert(2.0, 4.0, 5.0, 3.0, 6.0);
   float_tree.insert(2.0f, 4.0f, 5.0f, 3.0f, 6.0f);
-  complex_tree.insert(complex_t(50), complex_t(70), complex_t(60), complex_t(20), complex_t(90), complex_t(10), complex_t(40), complex_t(100));
+  complex_tree.insert(
+    complex_t(50),
+    complex_t(70),
+    complex_t(60),
+    complex_t(20)
+  );
 
   // Displaying the content of each tree.
   std::cout << format(string_tree) << std::endl;

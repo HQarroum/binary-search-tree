@@ -112,3 +112,9 @@ dist
 
 # Python
 __pycache__
+
+# Bazel
+bazel-bin
+bazel-c++
+bazel-out
+bazel-testlogs

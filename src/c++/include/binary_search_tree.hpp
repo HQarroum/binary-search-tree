@@ -6,8 +6,7 @@
 #include <functional>
 #include <memory>
 #include <optional>
-#include <binary_search_node.hpp>
-#include <iterators/dfs_iterator.hpp>
+#include <iterator>
 
 namespace bst {
   
@@ -18,21 +17,7 @@ namespace bst {
   enum direction_t {
     LEFT,
     RIGHT
-  };
-
-  /**
-   * @brief Type definition for the comparator function
-   * implementation used to compare values together.
-   */
-  template <typename T>
-  using comparator_t = std::function<int(const T&, const T&)>;
-
-  /**
-   * @brief Type definition for the to_string function
-   * implementation used to transform values into strings.
-   */
-  template <typename T>
-  using to_string_t = std::function<std::string(const T&)>;
+  };  
 
   /**
    * @brief Describes the options that can be passed to the
@@ -40,20 +25,49 @@ namespace bst {
    */
   template <typename T>
   struct options_t {
-    options_t(comparator_t<T> c, to_string_t<T> s)
+
+    /**
+     * @brief Type definition for the comparator function
+     * implementation used to compare values together.
+     */
+    using comparator_t = std::function<int(const T&, const T&)>;
+
+    /**
+     * @brief Type definition for the to_string function
+     * implementation used to transform values into strings.
+     */
+    using to_string_t = std::function<std::string(const T&)>;
+
+    /**
+     * @brief The binary search tree options.
+     * @param c the comparator function.
+     * @param s the stringifier function.
+     */
+    options_t(comparator_t c, to_string_t s)
       : comparator(c), stringifier(s) {}
     
+    /**
+     * @brief Compares two values.
+     * @param lhs the first value to compare.
+     * @param rhs the second value to compare.
+     * @return the result of the comparison.
+     */
     int compare(const T& lhs, const T& rhs) const {
       return (comparator(lhs, rhs));
     }
 
+    /**
+     * @brief Transforms a value into a string.
+     * @param value the value to transform.
+     * @return the resulting string.
+     */
     std::string to_string(const T& value) const {
       return (stringifier(value));
     }
     
     private:
-      comparator_t<T> comparator;
-      to_string_t<T>  stringifier;
+      comparator_t comparator;
+      to_string_t  stringifier;
   };
 
   /**
@@ -79,12 +93,6 @@ namespace bst {
      * implementation.
      */
     friend DefaultIterator;
-
-    /**
-     * Declaration of pointer types for attributes.
-     */
-    using tree_ptr_t = std::shared_ptr<tree_t<T>>;
-    using node_ptr_t = std::shared_ptr<node_t<T>>;
 
     /**
      * Defining the default iterator at the tree level.
@@ -119,6 +127,20 @@ namespace bst {
      * Assignment operator is deleted. 
      */
     tree_t& operator=(const tree_t&) = delete;
+
+    /**
+     * @brief Binary-search tree destructor.
+     */
+    ~tree_t() {
+      this->clear();
+    }
+
+    template<typename Iterator>
+    void insert(Iterator begin, Iterator end) {
+      for (Iterator it = begin; it != end; it++) {
+        this->insert(*it);
+      }
+    }
 
     /**
      * @brief Inserts a set of values provided as variadic arguments
@@ -156,6 +178,7 @@ namespace bst {
      * @brief Removes a set of values provided as variadic arguments
      * from the binary search tree.
      * @param args the values to remove from the tree.
+     * @note Complexity is O(nlog(n)) on average, O(n2) on the worst case.
      */
     template <class... Args>
     void remove(Args... args) {
@@ -163,6 +186,15 @@ namespace bst {
       (callable(std::forward<Args>(args)),...);
     }
 
+    /**
+     * @brief Removes the node associated with the given `data` from the binary-search tree
+     * starting from the given subtree.
+     * @param node the subtree to walk the tree from. 
+     * @param data the data to remove from the binary-search tree.
+     * @return a pointer to the successor node, or a NULL value
+     * if there is no successor.
+     * @note Complexity is O(log(n)) on average, O(n) on the worst case.
+     */
     node_t<T>* remove(node_t<T>* node, const T& data) {
       if (!node)
         return (nullptr);
@@ -179,6 +211,7 @@ namespace bst {
         if (!node->left && !node->right) {
           // If the node is the root, we need to set the root to nullptr.
           if (this->root == node) this->root = nullptr;
+          delete node;
           this->size_of_tree--;
           return (nullptr);
         // The node has one child.
@@ -189,11 +222,12 @@ namespace bst {
           successor->parent = node->parent;
           // If the node is the root, the child node becomes the new root.
           if (this->root == node) this->root = successor;
+          delete node;
           this->size_of_tree--;
           return (successor);
         // The node has two children.
         } else {
-          const auto successor = *min(node->right);
+          const auto successor = min(node->right);
           node->data = successor->data;
           node->right = remove(node->right, successor->data);
         }
@@ -204,6 +238,7 @@ namespace bst {
     /**
      * @brief Removes the node associated with the given `data` from the binary-search tree.
      * @param data the data to remove from the binary-search tree.
+     * @note Complexity is O(log(n)) on average, O(n) on the worst case.
      */
     void remove(const T& data) {
       remove(this->root, data);
@@ -212,6 +247,7 @@ namespace bst {
     /**
      * @brief Clears the given subtree.
      * @param node the root of the subtree to clear.
+     * @note Complexity is O(n) on average.
      */
     void clear(node_t<T>* node) {
       if (!node) return;
@@ -234,14 +270,26 @@ namespace bst {
       if (this->root == node) {
         this->root = nullptr;
       }
+      delete node;
     }
     
     /**
      * @brief Clears the binary-search tree.
      * @return the number of nodes removed from the tree.
+     * @note Complexity is O(n) on average.
      */
     void clear() {
       this->clear(this->root);
+    }
+
+    template<typename Iterator>
+    auto find(Iterator begin, Iterator end) {
+      std::vector<std::optional<const node_t<T>*>> nodes;
+
+      for (Iterator it = begin; it != end; it++) {
+        nodes.push_back(find(*it));
+      }
+      return (nodes);
     }
 
     /**
@@ -307,7 +355,7 @@ namespace bst {
      * @return a pointer to the node associated with the smallest value.
      * @note Complexity is O(log(n)) on average, O(n) on the worst case.
      */
-    std::optional<const node_t<T>*> min(const node_t<T>* node) const {
+    const node_t<T>* min(const node_t<T>* node) const {
       while (node && node->left != nullptr)
         node = node->left;
       return (node);
@@ -319,7 +367,7 @@ namespace bst {
      * @return a pointer to the node associated with the smallest value.
      * @note Complexity is O(log(n)) on average, O(n) on the worst case.
      */
-    std::optional<const node_t<T>*> min() const {
+    const node_t<T>* min() const {
       return (this->min(this->root));
     }
 
@@ -330,7 +378,7 @@ namespace bst {
      * @return a pointer to the node associated with the biggest value.
      * @note Complexity is O(log(n)) on average, O(n) on the worst case.
      */
-    std::optional<const node_t<T>*> max(const node_t<T>* node) const {
+    const node_t<T>* max(const node_t<T>* node) const {
       while (node && node->right != nullptr)
         node = node->right;
       return (node);
@@ -342,7 +390,7 @@ namespace bst {
      * @return a pointer to the node associated with the biggest value.
      * @note Complexity is O(log(n)) on average, O(n) on the worst case.
      */
-    std::optional<const node_t<T>*> max() const {
+    const node_t<T>* max() const {
       return (this->max(this->root));
     }
 
@@ -403,7 +451,7 @@ namespace bst {
      * @note Uses the depth-first search iterator by default.
      */
     const_iterator begin() const {
-      return (DefaultIterator(*this->min(), this));
+      return (DefaultIterator(this->min(), this));
     }
 
     /**
@@ -522,12 +570,12 @@ namespace bst {
           }
           // Initializing the node to the smallest node
           // in the binary search tree.
-          this->ptr = *this->tree->min(this->ptr);
+          this->ptr = this->tree->min(this->ptr);
         } else {
           // If a right node exist, we iterate right,
           // and we iterate again to the node with the smallest value.
           if (this->ptr->right) {
-            this->ptr = *this->tree->min(this->ptr->right);
+            this->ptr = this->tree->min(this->ptr->right);
           } else {
             auto node = this->ptr->parent;
             // If no right node exists, we iterate upwards until
@@ -556,13 +604,13 @@ namespace bst {
           }
           // Initializing the node to the biggest node
           // in the binary search tree.
-          this->ptr = *this->tree->max(this->ptr);
+          this->ptr = this->tree->max(this->ptr);
         } else {
           // If a left node exist, we iterate left,
           // and we iterate until we find the node with
           // the biggest value in the left subtree.
           if (this->ptr->left) {
-            this->ptr = *this->tree->max(this->ptr->left);
+            this->ptr = this->tree->max(this->ptr->left);
           } else {
             auto node = this->ptr->parent;
             // If no left node exists, we iterate upwards until

@@ -1,5 +1,5 @@
 cc_binary(
-  name = "insert_and_search",
+  name = "search",
   srcs = ["main.cpp"],
   copts = [
     "-Iinclude",

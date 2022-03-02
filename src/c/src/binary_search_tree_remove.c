@@ -2,10 +2,11 @@
 
 /**
  * @brief Removes the node associated with the given `data` from the binary-search tree
- * starting from the `subtree_root_node`.
+ * starting from the given subtree.
  * @param node the node of the subtree to walk the tree from. 
  * @param data the data to remove from the binary-search tree.
- * @return 0 if the node was removed, -1 otherwise.
+ * @return a pointer to the successor node, or a NULL value
+ * if there is no successor.
  */
 bst_node_t* bst_remove_from(bst_node_t* node, const void* data) {
   if (!node || !data)

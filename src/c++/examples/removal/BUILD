@@ -1,5 +1,5 @@
 cc_binary(
-  name = "remove_nodes",
+  name = "removal",
   srcs = ["main.cpp"],
   copts = [
     "-Iinclude",

@@ -18,4 +18,25 @@ Lead Maintainer: [Halim Qarroum](mailto:hqm.post@gmail.com)
 
 ## 🔰 Description
 
+<br />
+<table align="center">
+  <thead>
+    <tr>
+      <th>Python</th>
+      <th>Typescript</th>
+      <th>Rust</th>
+      <th>C</th>
+      <th>C++</th>
+    </tr>
+  </thead>
+  <tr>
+    <td><img width="80" src="assets/typescript.png" ></td>
+    <td><img width="80" src="assets/eslint.png" /></td>
+    <td><img width="80" src="assets/esbuild.png"></td>
+    <td><img width="80" src="assets/prettier.png" ></td>
+    <td><img width="80" src="assets/jest.png" ></td>
+  </tr>
+</table>
+<br />
+
 ## 👀 See also

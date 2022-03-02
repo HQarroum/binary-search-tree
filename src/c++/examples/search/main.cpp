@@ -23,20 +23,6 @@ constexpr auto array_of(T&&... t) -> std::array <V, sizeof...(T)> {
 /**                                100                                 */
 static constexpr auto data = array_of<int>(50, 70, 60, 20, 90, 10, 40, 100);
 
-/**
- * @brief Displays information about the given tree.
- */
-template <typename T>
-std::string format(const bst::tree_t<T>& tree) {
-  std::stringstream ss;
-
-  ss << "Size : " << tree.size() << std::endl
-    << "Min : " << (*tree.min())->value() << std::endl
-    << "Max : " << (*tree.max())->value() << std::endl
-    << std::endl << tree;
-  return (ss.str());
-}
-
 int main(void) {
   auto tree = bst::tree_t<int>();
 
@@ -46,16 +32,17 @@ int main(void) {
   });
 
   // Searching for an element.
-  assert((*tree.find(100))->data == 100);
+  auto optional = tree.find(100);
+  assert(optional.has_value());
+  std::cout << (*optional)->data << std::endl;
 
-  // Displaying the tree.
-  std::cout << format(tree) << std::endl;
-
-  // Inserting new elements.
-  tree.insert(30, 15, 25, 35, 45, 55, 65, 75, 85, 95);
-
-  // Displaying the tree.
-  std::cout << format(tree) << std::endl;
+  // Searching for many elements using an iterator.
+  auto result = tree.find(data.begin(), data.end());
+  assert(result.size() == data.size());
+  for (auto node : result) {
+    std::cout << (*node)->data << " ";
+  }
+  std::cout << std::endl;
 
   return (0);
 }
