@@ -4,8 +4,8 @@
 </p>
 <br /><br />
 
-# a-world-of-trees
-> A set of tree data structures with idiomatic language implementations.
+# binary-search-tree
+> A set of idiomatic implementations of a binary-search tree in multiple languages.
 
 Current version: **1.0.0**
 
