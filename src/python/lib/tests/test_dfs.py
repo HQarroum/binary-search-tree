@@ -1,5 +1,5 @@
 import unittest
-from lib.bst import BinarySearchTree
+from bst import BinarySearchTree
 
 class BstDfsIterator(unittest.TestCase):
 

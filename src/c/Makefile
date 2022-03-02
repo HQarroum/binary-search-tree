@@ -16,7 +16,7 @@ LIB_STATIC_NAME = lib$(LIB_NAME).a
 SRC = $(wildcard ./src/*.c)
 
 # Default flags.
-CFLAGS = -std=c99 -W -Wall -Werror -ansi -fPIC -g3 -I./include
+CFLAGS = -std=c99 -W -Wall -Werror -ansi -fPIC -g3 -I./include -O3
 
 # Conditionally enable coverage for the compiler.
 ifeq ($(COVERAGE),true)

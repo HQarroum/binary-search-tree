@@ -1,5 +1,5 @@
 import unittest
-from lib.bst import BinarySearchTree
+from bst import BinarySearchTree
 
 class BstRemoval(unittest.TestCase):
 
@@ -9,7 +9,7 @@ class BstRemoval(unittest.TestCase):
 
   def runTest(self):
     self.bst.remove(2)
-    self.assertEqual(self.bst.size, 9)
+    self.assertEqual(self.bst.size, 8)
     self.assertEqual(self.bst.find(2), None)
     self.assertEqual(self.bst.min().data, 3)
     self.assertEqual(self.bst.max().data, 10)
