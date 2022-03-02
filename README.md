@@ -30,11 +30,11 @@ Lead Maintainer: [Halim Qarroum](mailto:hqm.post@gmail.com)
     </tr>
   </thead>
   <tr>
-    <td><img width="80" src="assets/typescript.png" ></td>
-    <td><img width="80" src="assets/eslint.png" /></td>
-    <td><img width="80" src="assets/esbuild.png"></td>
-    <td><img width="80" src="assets/prettier.png" ></td>
-    <td><img width="80" src="assets/jest.png" ></td>
+    <td><img width="80" src="assets/python.png" ></td>
+    <td><img width="80" src="assets/typescript.png" /></td>
+    <td><img width="80" src="assets/rust.png"></td>
+    <td><img width="80" src="assets/c.png" ></td>
+    <td><img width="80" src="assets/c++.png" ></td>
   </tr>
 </table>
 <br />
