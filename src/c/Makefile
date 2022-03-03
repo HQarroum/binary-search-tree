@@ -43,8 +43,11 @@ all: $(OBJ)
 gcov: $(OBJ)
 	gcov $(OBJ)
 
-tests:
-	make -C tests/
+tests: all
+	cd tests && $(MAKE)
+
+benchmark: all
+	cd benchmark && $(MAKE)
 
 re: fclean all
 
@@ -57,5 +60,7 @@ fclean: clean
 	rm -rf src/*.gcda
 	rm -rf src/*.info
 	rm -rf src/*.gcov
+	cd tests && $(MAKE) fclean
+	cd benchmark && $(MAKE) fclean
 
 .PHONY: clean fclean re

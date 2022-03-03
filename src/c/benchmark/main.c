@@ -18,7 +18,7 @@ int main(void) {
   });
 
   // The array which hold the random values.
-  int array[iterations] = {0};
+  int array[iterations];
 
   // Inserting the data.
   for (size_t i = 0; i < iterations; ++i) {
