@@ -26,7 +26,7 @@ static void search_iterator_callback(const bst_node_t* node, bst_iterator_ctx_t*
   const int ctx_data  = *(static_cast<const int*>(ctx->data));
 
   if (node_data == ctx_data) {
-    ctx->data = &node_data;
+    ctx->data = node->data;
     ctx->state = BST_ITERATION_DONE;
   }
 }

@@ -108,7 +108,7 @@ static const bst_node_t* bst_get_kth_number_from(const bst_node_t* node, size_t*
   }
 
   /* Iterating until we reach the largest value. */
-  const bst_node_t* result = bst_get_kth_number_from(direction == RIGHT ?
+  const bst_node_t* result = bst_get_kth_number_from(direction == BST_RIGHT ?
     node->right : node->left,
     k,
     direction
@@ -130,7 +130,7 @@ static const bst_node_t* bst_get_kth_number_from(const bst_node_t* node, size_t*
   }
 
   /* Iterating over the opposite subtree to traverse all nodes. */
-  return (bst_get_kth_number_from(direction == RIGHT ?
+  return (bst_get_kth_number_from(direction == BST_RIGHT ?
     node->left : node->right,
     k,
     direction
@@ -148,7 +148,7 @@ static const bst_node_t* bst_get_kth_number_from(const bst_node_t* node, size_t*
  * the given subtree, or NULL if no nodes were matching.
  */
 const bst_node_t* bst_get_kth_largest_from(const bst_node_t* node, size_t k) {
-  return (bst_get_kth_number_from(node, &k, RIGHT));
+  return (bst_get_kth_number_from(node, &k, BST_RIGHT));
 }
 
 /**
@@ -162,7 +162,7 @@ const bst_node_t* bst_get_kth_largest_from(const bst_node_t* node, size_t k) {
  * the given subtree, or NULL if no nodes were matching.
  */
 const bst_node_t* bst_get_kth_smallest_from(const bst_node_t* node, size_t k) {
-  return (bst_get_kth_number_from(node, &k, LEFT));
+  return (bst_get_kth_number_from(node, &k, BST_LEFT));
 }
 
 /**

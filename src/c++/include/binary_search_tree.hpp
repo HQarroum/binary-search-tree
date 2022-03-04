@@ -638,14 +638,14 @@ namespace bst {
      * @param data The data to be stored in the node.
      */
     node_t(const T& data) :
-      left{nullptr}, right{nullptr}, parent{nullptr}, tree{nullptr}, data{data} {}
+      data{data}, left{nullptr}, right{nullptr}, parent{nullptr}, tree{nullptr} {}
 
     /**
      * @brief Node move constructor.
      * @param data The data to be moved to the node.
      */
     node_t(const T&& data) :
-      left{nullptr}, right{nullptr}, parent{nullptr}, tree{nullptr}, data{std::move(data)} {}
+      data{std::move(data)}, left{nullptr}, right{nullptr}, parent{nullptr}, tree{nullptr} {}
 
     /**
      * @return a reference to the data stored by the node.

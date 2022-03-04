@@ -48,8 +48,8 @@ typedef struct bst_options_t {
  * exist between two nodes.
  */
 typedef enum bst_direction_t {
-  LEFT,
-  RIGHT
+  BST_LEFT,
+  BST_RIGHT
 } bst_direction_t;
 
 /**

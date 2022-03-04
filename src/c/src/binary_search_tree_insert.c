@@ -8,8 +8,10 @@
  * @return a pointer to the newly attached node.
  * @note Complexity is O(log(n)) on average, O(n) on the worst case.
  */
-static const bst_node_t* bst_attach_node(bst_node_t* node, bst_node_t* new_node, bst_direction_t direction) {
-  if (direction == LEFT) {
+static const bst_node_t* bst_attach_node(bst_node_t* node, const void* data, bst_direction_t direction) {
+  bst_node_t* new_node = bst_create_node(data);
+  
+  if (direction == BST_LEFT) {
     node->left = new_node;
   } else {
     node->right = new_node;
@@ -24,26 +26,27 @@ static const bst_node_t* bst_attach_node(bst_node_t* node, bst_node_t* new_node,
  * @brief Inserts a new node into the given subtree.
  * @param node the root of the subtree to insert the node into.
  * @param new_node the new node to insert.
- * @return a pointer to the newly inserted node.
+ * @return a pointer to the newly inserted node, or NULL if the
+ * node was not inserted.
  * @note Complexity is O(log(n)) on average, O(n) on the worst case.
  */
-static const bst_node_t* bst_insert_from(bst_node_t* node, bst_node_t* new_node) {
-  int result = node->tree->options.comparator(new_node->data, node->data);
+static const bst_node_t* bst_insert_from(bst_node_t* node, const void* data) {
+  int result = node->tree->options.comparator(data, node->data);
 
   if (result < 0) {
     if (node->left) {
-      return (bst_insert_from(node->left, new_node));
+      return (bst_insert_from(node->left, data));
     } else {
-      return (bst_attach_node(node, new_node, LEFT));
+      return (bst_attach_node(node, data, BST_LEFT));
     }
   } else if (result > 0) {
     if (node->right) {
-      return (bst_insert_from(node->right, new_node));
+      return (bst_insert_from(node->right, data));
     } else {
-      return (bst_attach_node(node, new_node, RIGHT));
+      return (bst_attach_node(node, data, BST_RIGHT));
     }
   } else {
-    return (node);
+    return (NULL);
   }
 }
 
@@ -55,14 +58,12 @@ static const bst_node_t* bst_insert_from(bst_node_t* node, bst_node_t* new_node)
  * @note Complexity is O(log(n)) on average, O(n) on the worst case.
  */
 const bst_node_t* bst_insert(bst_tree_t* tree, const void* data) {
-  bst_node_t* node = bst_create_node(data);
-
   /* The tree is empty. */
   if (!tree->root) {
+    bst_node_t* new_node = bst_create_node(data);
+    new_node->tree = tree;
     tree->size = 1;
-    node->tree = tree;
-    return (tree->root = node);
+    return (tree->root = new_node);
   }
-
-  return (bst_insert_from(tree->root, node));
+  return (bst_insert_from(tree->root, data));
 }
