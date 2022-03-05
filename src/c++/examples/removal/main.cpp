@@ -40,9 +40,7 @@ int main(void) {
   std::cout << format(tree) << std::endl;
 
   // Removing nodes.
-  for (auto node : tree) {
-    tree.remove(node);
-  }
+  tree.remove(tree.begin(), tree.end());
 
   // Displaying the tree.
   std::cout << format(tree) << std::endl;

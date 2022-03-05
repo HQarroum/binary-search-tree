@@ -135,9 +135,15 @@ namespace bst {
       this->clear();
     }
 
+    /**
+     * @brief Inserts a set of values provided by the iterator
+     * in the binary-search tree.
+     * @param begin the iterator to the beginning of the iterable.
+     * @param end the iterator to the end of the iterable.
+     */
     template<typename Iterator>
     void insert(Iterator begin, Iterator end) {
-      for (Iterator it = begin; it != end; it++) {
+      for (Iterator it = begin; it != end; ++it) {
         this->insert(*it);
       }
     }
@@ -171,6 +177,19 @@ namespace bst {
       // Otherwise, we recursively traverse the tree to find
       // the right position for the new node.
       return (insert(this->root, data));
+    }
+
+    /**
+     * @brief Removes a set of values provided by the iterator
+     * from the binary-search tree.
+     * @param begin the iterator to the beginning of the iterable.
+     * @param end the iterator to the end of the iterable.
+     */
+    template<typename Iterator>
+    void remove(Iterator begin, Iterator end) {
+      for (Iterator it = begin; it != end; ++it) {
+        this->remove(*it);
+      }
     }
 
     /**
@@ -269,7 +288,6 @@ namespace bst {
       if (this->root == node) {
         this->root = nullptr;
       }
-      std::cout << "Deleting node " << node->data << std::endl;
       delete node;
     }
     
@@ -282,29 +300,42 @@ namespace bst {
       this->clear(this->root);
     }
 
+    /**
+     * @brief Looks-up the binary-search tree for the nodes
+     * associated with the given iterator.
+     * @param begin the iterator to the beginning of the iterable.
+     * @param end the iterator to the end of the iterable.
+     * @return a vector of optional pointers to the found nodes.
+     */
     template<typename Iterator>
     auto find(Iterator begin, Iterator end) {
       std::vector<std::optional<const node_t<T>*>> nodes;
 
-      for (Iterator it = begin; it != end; it++) {
+      for (Iterator it = begin; it != end; ++it) {
         nodes.push_back(find(*it));
       }
       return (nodes);
     }
 
     /**
-     * @brief Removes a set of values provided as variadic arguments
-     * from the binary search tree.
-     * @param args the values to remove from the tree.
+     * @brief Looks-up the binary-search tree for the nodes
+     * associated with the given variadic arguments.
+     * @param args the values to search for in the tree.
+     * @return an array of optional pointers to the found nodes.
      */
     template <class... Args, std::enable_if_t<(sizeof...(Args) >= 2)>* = nullptr>
     auto find(Args... args) {
       size_t idx = 0;
-      std::array<std::optional<const node_t<T>*>, sizeof...(Args)> nodes = {};
+      std::array<
+        std::optional<const node_t<T>*>, sizeof...(Args)
+      > nodes = {};
 
+      // The callable function inserts the results
+      // of the find operation into the array.
       auto callable = [&] (const T& arg) {
         nodes[idx++] = this->find(arg);
       };
+
       (callable(std::forward<Args>(args)),...);
       return (nodes);
     }
@@ -314,8 +345,7 @@ namespace bst {
      * the node associated with the given `data`.
      * @param node the node to start the traversal from.
      * @param data the data to find in the given subtree.
-     * @return a pointer to the found node, or NULL if the node
-     * was not found.
+     * @return an optional pointer to the found node.
      * @note Complexity is O(log(n)) on average, O(n) in the worst case.
      */
     std::optional<const node_t<T>*> find(const node_t<T>* node, const T& data) const {
@@ -557,7 +587,7 @@ namespace bst {
         }
         return (this->ptr->value());
       }
-
+  
       /**
        * @brief Increments the iterator.
        * @return a reference to the iterator.
@@ -593,6 +623,16 @@ namespace bst {
       }
 
       /**
+       * @brief Postfix increment operator.
+       * @return a copy of the iterator before incrementing it.
+       */
+      dfs_iterator_t operator++(int) {
+        dfs_iterator_t<T> tmp = *this;
+        ++(*this);
+        return (tmp);
+      }
+
+      /**
        * @brief Decrements the iterator.
        * @return a reference to the iterator.
        */
@@ -625,6 +665,16 @@ namespace bst {
           }
         }
         return (*this);
+      }
+
+      /**
+       * @brief Postfix decrement operator.
+       * @return a copy of the iterator before decrementing it.
+       */
+      dfs_iterator_t operator--(int) {
+        dfs_iterator_t<T> tmp = *this;
+        --(*this);
+        return (tmp);
       }
   };
 

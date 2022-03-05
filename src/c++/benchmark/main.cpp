@@ -1,4 +1,5 @@
 #include <cfloat>
+#include <cassert>
 #include <cmath>
 #include <random>
 #include <binary_search_tree.hpp>
@@ -15,7 +16,7 @@ int main(void) {
 
   auto tree = bst::tree_t<int>();
 
-  for (int i = 0; i < iterations; ++i) {
+  for (size_t i = 0; i < iterations; ++i) {
     auto element = uniform_dist(engine);
     tree.insert(element);
     assert(tree.find(element).has_value());

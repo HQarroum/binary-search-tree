@@ -1,5 +1,5 @@
 cc_binary(
-  name = "benchmarks",
+  name = "benchmark",
   srcs = ["main.cpp"],
   copts = [
     "-Iinclude",

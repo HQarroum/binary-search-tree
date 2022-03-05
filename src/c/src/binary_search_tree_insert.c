@@ -9,13 +9,20 @@
  * @note Complexity is O(log(n)) on average, O(n) on the worst case.
  */
 static const bst_node_t* bst_attach_node(bst_node_t* node, const void* data, bst_direction_t direction) {
-  bst_node_t* new_node = bst_create_node(data);
+  bst_node_t* new_node;
+
+  // Allocating memory for the new node.
+  if ((node = bst_create_node(data)) == NULL) {
+    return (NULL);
+  }
   
+  // Attaching the new node to the tree.
   if (direction == BST_LEFT) {
     node->left = new_node;
   } else {
     node->right = new_node;
   }
+
   new_node->parent = node;
   new_node->tree = node->tree;
   new_node->tree->size++;
