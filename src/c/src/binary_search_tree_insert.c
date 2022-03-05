@@ -54,7 +54,8 @@ static const bst_node_t* bst_insert_from(bst_node_t* node, const void* data) {
  * @brief Inserts the given `data` in the binary-search tree.
  * @param tree a pointer to the binary-search tree.
  * @param data a pointer to the data to insert in the binary-search tree.
- * @return a pointer to the created node that wraps the pointer to the given data.
+ * @return a pointer to the created node that wraps the pointer to the given data,
+ * or NULL if the node was not inserted.
  * @note Complexity is O(log(n)) on average, O(n) on the worst case.
  */
 const bst_node_t* bst_insert(bst_tree_t* tree, const void* data) {
