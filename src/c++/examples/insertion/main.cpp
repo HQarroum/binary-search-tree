@@ -38,6 +38,7 @@ std::string format(const bst::tree_t<T>& tree) {
 }
 
 int main(void) {
+  
   auto tree = bst::tree_t<int>();
 
   // Insert the data manually into the tree.

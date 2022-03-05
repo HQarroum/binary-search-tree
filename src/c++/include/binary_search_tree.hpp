@@ -160,18 +160,17 @@ namespace bst {
      * @note Complexity is O(log(n)) on average, O(n) on the worst case.
      */
     const node_t<T>* insert(const T& data) {
-      auto node = new node_t<T>(data);
-
       // The tree is empty.
       if (!this->size_of_tree) {
+        auto new_node      = new node_t<T>(data);
+        new_node->tree     = this;
         this->size_of_tree = 1;
-        node->tree         = this;
-        return (this->root = node);
+        return (this->root = new_node);
       }
 
       // Otherwise, we recursively traverse the tree to find
       // the right position for the new node.
-      return (insert(this->root, node));
+      return (insert(this->root, data));
     }
 
     /**
@@ -270,6 +269,7 @@ namespace bst {
       if (this->root == node) {
         this->root = nullptr;
       }
+      std::cout << "Deleting node " << node->data << std::endl;
       delete node;
     }
     
@@ -475,7 +475,9 @@ namespace bst {
        * @return a pointer to the newly attached node.
        * @note Complexity is O(log(n)) on average, O(n) on the worst case.
        */
-      node_t<T>* attach(node_t<T>* node, node_t<T>* new_node, direction_t direction) {
+      node_t<T>* attach(node_t<T>* node, const T& data, direction_t direction) {
+        auto new_node = new node_t<T>(data);
+
         direction == LEFT ? node->left = new_node : node->right = new_node;
         new_node->parent = node;
         new_node->tree = this;
@@ -490,16 +492,16 @@ namespace bst {
        * @return a pointer to the newly inserted node.
        * @note Complexity is O(log(n)) on average, O(n) on the worst case.
        */
-      node_t<T>* insert(node_t<T>* node, node_t<T>* new_node) {
+      node_t<T>* insert(node_t<T>* node, const T& data) {
         // Comparing the new node's value with the current node's value.
-        auto result = this->options.compare(new_node->value(), node->value());
+        auto result = this->options.compare(data, node->value());
 
         if (result < 0) {
-          return (node->left ? insert(node->left, new_node) : attach(node, new_node, LEFT));
+          return (node->left ? insert(node->left, data) : attach(node, data, LEFT));
         } else if (result > 0) {
-          return (node->right ? insert(node->right, new_node) : attach(node, new_node, RIGHT));
+          return (node->right ? insert(node->right, data) : attach(node, data, RIGHT));
         } else {
-          return (node);
+          return (NULL);
         }
       }
   };

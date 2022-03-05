@@ -63,8 +63,8 @@ std::string format(const bst::tree_t<T>& tree) {
   std::stringstream ss;
 
   ss << "Size : " << tree.size() << std::endl
-    << "Min : " << (*tree.min())->value() << std::endl
-    << "Max : " << (*tree.max())->value() << std::endl
+    << "Min : " << tree.min()->value() << std::endl
+    << "Max : " << tree.max()->value() << std::endl
     << std::endl << tree;
   return (ss.str());
 }

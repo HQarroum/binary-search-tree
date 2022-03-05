@@ -1,5 +1,5 @@
 filegroup(
-  name = "build_all",
+  name = "examples",
   srcs = [
     "//examples/insertion:insertion",
     "//examples/removal:removal",

@@ -1,6 +1,7 @@
 #include <array>
 #include <iostream>
 #include <sstream>
+#include <assert.h>
 #include <binary_search_tree.hpp>
 
 /**

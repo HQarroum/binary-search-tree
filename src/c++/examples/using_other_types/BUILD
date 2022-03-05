@@ -7,5 +7,6 @@ cc_binary(
   ],
   deps = [
     "//include:binary_search_tree"
-  ]
+  ],
+  visibility = ["//visibility:public"]
 )

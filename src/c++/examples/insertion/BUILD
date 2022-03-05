@@ -3,9 +3,14 @@ cc_binary(
   srcs = ["main.cpp"],
   copts = [
     "-Iinclude",
-    "-std=c++17"
+    "-std=c++17",
+    "-W",
+    "-Wall",
+    "-Werror",
+    "-O3"
   ],
   deps = [
     "//include:binary_search_tree"
-  ]
+  ],
+  visibility = ["//visibility:public"]
 )
