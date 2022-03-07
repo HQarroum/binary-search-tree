@@ -85,6 +85,13 @@ void bst_breadth_first_traversal(const bst_node_t* node, bst_callback_t callback
   }
 }
 
+/**
+ * @brief A traversal strategy to allow users to search for an element in the tree
+ * by being called back at each iteration of the traversal.
+ * @param node The node to start the traversal from.
+ * @param callback A callback function invoked for each node.
+ * @param ctx The iteration context.
+ */
 void bst_search_traversal(const bst_node_t* node, bst_callback_t callback, bst_iterator_ctx_t* ctx) {
   /* Ensure that the node and the given data are valid. */
   if (!node || !node->data || !ctx->data || ctx->state != BST_ITERATION_IN_PROGRESS || !callback) {

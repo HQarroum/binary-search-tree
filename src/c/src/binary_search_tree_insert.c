@@ -11,12 +11,12 @@
 static const bst_node_t* bst_attach_node(bst_node_t* node, const void* data, bst_direction_t direction) {
   bst_node_t* new_node;
 
-  // Allocating memory for the new node.
-  if ((node = bst_create_node(data)) == NULL) {
+  /* Allocating memory for the new node. */
+  if ((new_node = bst_create_node(data)) == NULL) {
     return (NULL);
   }
   
-  // Attaching the new node to the tree.
+  /* Attaching the new node to the tree. */
   if (direction == BST_LEFT) {
     node->left = new_node;
   } else {
@@ -66,9 +66,13 @@ static const bst_node_t* bst_insert_from(bst_node_t* node, const void* data) {
  * @note Complexity is O(log(n)) on average, O(n) on the worst case.
  */
 const bst_node_t* bst_insert(bst_tree_t* tree, const void* data) {
+  bst_node_t* new_node = NULL;
+
   /* The tree is empty. */
   if (!tree->root) {
-    bst_node_t* new_node = bst_create_node(data);
+    if ((new_node = bst_create_node(data)) == NULL) {
+      return (NULL);
+    }
     new_node->tree = tree;
     tree->size = 1;
     return (tree->root = new_node);

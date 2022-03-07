@@ -74,10 +74,13 @@ typedef struct bst_tree_t {
   bst_options_t options;
 } bst_tree_t;
 
-
+/**
+ * @brief The result of a sort operation
+ * on the nodes of a binary-search tree.
+ */
 typedef struct bst_sort_result_t {
   const bst_node_t** nodes;
-  size_t size;
+  size_t             size;
 } bst_sort_result_t;
 
 /**
@@ -270,6 +273,7 @@ bst_iterator_ctx_t bst_for_each(const bst_tree_t* tree, bst_callback_t callback,
  * Can be used to implement a tree-sort on the tree elements to sort the tree.
  * @param node The node to start the traversal from.
  * @param callback A callback function invoked for each node.
+ * @param ctx The iteration context.
  */
 void bst_in_order_traversal(const bst_node_t* node, bst_callback_t callback, bst_iterator_ctx_t* ctx);
 
@@ -277,6 +281,7 @@ void bst_in_order_traversal(const bst_node_t* node, bst_callback_t callback, bst
  * @brief A traversal strategy to traverse the binary-search tree post-order.
  * @param node The node to start the traversal from.
  * @param callback A callback function invoked for each node.
+ * @param ctx The iteration context.
  */
 void bst_post_order_traversal(const bst_node_t* node, bst_callback_t callback, bst_iterator_ctx_t* ctx);
 
@@ -284,6 +289,7 @@ void bst_post_order_traversal(const bst_node_t* node, bst_callback_t callback, b
  * @brief A traversal strategy to traverse the binary-search tree in a depth-first manner.
  * @param node The node to start the traversal from.
  * @param callback A callback function invoked for each node.
+ * @param ctx The iteration context.
  */
 void bst_depth_first_traversal(const bst_node_t* node, bst_callback_t callback, bst_iterator_ctx_t* ctx);
 
@@ -291,9 +297,17 @@ void bst_depth_first_traversal(const bst_node_t* node, bst_callback_t callback, 
  * @brief A traversal strategy to traverse the binary-search tree in a breadth-first manner.
  * @param node The node to start the traversal from.
  * @param callback A callback function invoked for each node.
+ * @param ctx The iteration context.
  */
 void bst_breadth_first_traversal(const bst_node_t* node, bst_callback_t callback, bst_iterator_ctx_t* ctx);
 
+/**
+ * @brief A traversal strategy to allow users to search for an element in the tree
+ * by being called back at each iteration of the traversal.
+ * @param node The node to start the traversal from.
+ * @param callback A callback function invoked for each node.
+ * @param ctx The iteration context.
+ */
 void bst_search_traversal(const bst_node_t* node, bst_callback_t callback, bst_iterator_ctx_t* ctx);
 
 /**

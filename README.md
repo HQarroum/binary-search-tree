@@ -9,8 +9,6 @@
 
 Current version: **1.0.0**
 
-Lead Maintainer: [Halim Qarroum](mailto:hqm.post@gmail.com)
-
 ## 📋 Table of content
 
 - [Description](#-description)

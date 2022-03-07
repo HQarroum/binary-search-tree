@@ -30,9 +30,6 @@ int main(void) {
   // Clearing the tree.
   tree.clear();
 
-  // Displaying the tree.
-  std::cout << format(tree) << std::endl;
-
   // Inserting new elements.
   tree.insert(25, 30, 15, 20, 45);
 
@@ -41,9 +38,6 @@ int main(void) {
 
   // Removing nodes.
   tree.remove(tree.begin(), tree.end());
-
-  // Displaying the tree.
-  std::cout << format(tree) << std::endl;
 
   // Inserting new elements.
   tree.insert(25, 30, 15, 20, 45);
