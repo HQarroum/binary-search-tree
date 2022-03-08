@@ -2,7 +2,7 @@
 # a binary search tree.
 class Node:
   def __init__(self, data):
-    if not data:
+    if data is None:
       raise ValueError("Data cannot be null")
     self.data = data
     self.left = None

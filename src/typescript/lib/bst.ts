@@ -105,6 +105,10 @@ export class BinarySearchTree<T> implements ITree<T>, Iterable<Node<T>> {
     }
   }
 
+  /**
+   * Inserts the given value in the binary-search tree.
+   * @param value the value to insert.
+   */
   insert(value: T): void {
     if (!this.root_) {
       this.root_      = new Node<T>(value);
@@ -114,6 +118,14 @@ export class BinarySearchTree<T> implements ITree<T>, Iterable<Node<T>> {
     this.insert_in(this.root_, value);
   }
 
+  /**
+   * A function to find the node associated with `data`
+    in the given subtree.
+   * @param value the value to search for.
+   * @param node the root of the subtree to search in.
+   * @returns the node associated with the given value,
+   * or null if the value is not in the tree.
+   */
   find(value: T, node: Node<T> | null = this.root_): Node<T> | null {
     if (!node) {
       return (null);
@@ -211,6 +223,11 @@ export class BinarySearchTree<T> implements ITree<T>, Iterable<Node<T>> {
     return (this.kth_number(k, Direction.RIGHT, node));
   }
 
+  /**
+   * Sorts the binary-search tree in ascending order.
+   * @param node the root of the subtree to sort.
+   * @returns an array containing the sorted values.
+   */
   sort(node: Node<T> | null = this.root_): T[] {
     const result: T[] = [];
 
@@ -243,6 +260,12 @@ export class BinarySearchTree<T> implements ITree<T>, Iterable<Node<T>> {
     }
   }
 
+  /**
+   * @param node the root of the subtree to display.
+   * @param result the string representation of the subtree.
+   * @param prefix a prefix to add to each line.
+   * @returns a string representation of the binary-search tree.
+   */
   toString(node: Node<T> | null = this.root_, result = "", prefix = ""): string {
     if (!node) {
       // We reached the end of a subtree.

@@ -86,7 +86,7 @@ class BinarySearchTree:
 
   def find(self, **kwargs):
     """
-    A helper function to find the node associated with `data`
+    A function to find the node associated with `data`
     in the given subtree.
     :param node: The root of the subtree to search in.
     :param data: The data used to return the associated node from the binary-search tree.
@@ -200,7 +200,7 @@ class BinarySearchTree:
     from the given subtree.
     :param node: The node to remove from the binary-search tree.
     """
-    if not node or not data:
+    if not node or data is None:
       return None
 
     # Comparing the given data to the current node's data.
@@ -285,6 +285,8 @@ class BinarySearchTree:
     """
     Returns a string representation of the binary-search tree.
     :param node: The root of the subtree to display.
+    :param result: The string representation of the subtree.
+    :param prefix: A prefix to add to each line.
     """
     if not node:
       return result
