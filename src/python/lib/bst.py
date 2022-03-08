@@ -136,6 +136,10 @@ class BinarySearchTree:
     return list(map(lambda n: n.data, InOrderIterator(self, kwargs.get('subtree', self.root)).array()))
 
   def kth_number(self, **kwargs):
+    """
+    A helper function to compute the kth value in the given subtree
+    iterating from the left or the right direction.
+    """
     k = kwargs['k']
     num = kwargs.get('direction', 'smallest')
 

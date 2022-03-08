@@ -67,7 +67,7 @@ export class BinarySearchTree<T> implements ITree<T>, Iterable<Node<T>> {
   private attach(node: Node<T>, value: T, direction: Direction) {
     const new_node = new Node<T>(value);
 
-    if (direction == Direction.LEFT) {
+    if (direction === Direction.LEFT) {
       node.left = new_node;
     } else {
       node.right = new_node;
@@ -153,6 +153,62 @@ export class BinarySearchTree<T> implements ITree<T>, Iterable<Node<T>> {
       node = node.left;
     }
     return (node);
+  }
+
+  /**
+   * A helper function to compute the kth value in the given subtree
+   * iterating from the left or the right direction.
+   * @param k the kth number to find.
+   * @param direction the direction to iterate towards.
+   * @param node the root of the subtree to search.
+   * @returns a node with the kth value or null if the tree is empty.
+   */
+  private kth_number(k: number, direction: Direction, node: Node<T> | null = this.root_): Node<T> | null {
+    return (function iterate (node: Node<T> | null): Node<T> | null {
+      if (!node) {
+        return (null);
+      }
+
+      // Iterating until we find the smallest node.
+      const result = iterate(direction === Direction.LEFT ? node.left : node.right);
+
+      if (result) {
+        return (result);
+      }
+
+      // Once we reached the largest value, we decrement k for each
+      // number of nodes traversed backwards.
+      k = k - 1;
+
+      // If the current node is the kth smallest, we return it.
+      if (k == 0) {
+        return (node);
+      }
+
+      return (iterate(direction === Direction.LEFT ? node.right : node.left));
+    })(node);
+  }
+
+  /**
+   * Computes the kth smallest value in the given subtree.
+   * @param k The kth smallest value in the binary-search tree.
+   * @param node The root of the subtree to search in.
+   * @returns the kth smallest value in the binary-search tree,
+   * or null if the tree is empty.
+   */
+  kth_smallest(k: number, node: Node<T> | null = this.root_): Node<T> | null {
+    return (this.kth_number(k, Direction.LEFT, node));
+  }
+
+  /**
+   * Computes the kth largest value in the given subtree.
+   * @param k The kth largest value in the binary-search tree.
+   * @param node The root of the subtree to search in.
+   * @returns the kth largest value in the binary-search tree,
+   * or null if the tree is empty.
+   */
+  kth_largest(k: number, node: Node<T> | null = this.root_): Node<T> | null {
+    return (this.kth_number(k, Direction.RIGHT, node));
   }
 
   sort(node: Node<T> | null = this.root_): T[] {

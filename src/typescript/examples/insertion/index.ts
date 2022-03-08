@@ -16,4 +16,4 @@ const tree = new BinarySearchTree<number>({
 
 data.forEach((value) => tree.insert(value));
 
-console.log(tree.toString());
+console.log(tree.kth_largest(1)?.value);
