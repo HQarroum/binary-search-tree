@@ -500,7 +500,7 @@ namespace bst {
       /**
        * @brief A helper function to attach a node to another node.
        * @param node the node to attach the new node to.
-       * @param new_node the new node to attach.
+       * @param data the data to associate with the new node.
        * @param direction whether the new node should be attached to the left or right.
        * @return a pointer to the newly attached node.
        * @note Complexity is O(log(n)) on average, O(n) on the worst case.
@@ -518,7 +518,7 @@ namespace bst {
       /**
        * @brief Inserts a new node into the given subtree.
        * @param node the root of the subtree to insert the node into.
-       * @param new_node the new node to insert.
+       * @param data the data to associate with the new node.
        * @return a pointer to the newly inserted node.
        * @note Complexity is O(log(n)) on average, O(n) on the worst case.
        */
