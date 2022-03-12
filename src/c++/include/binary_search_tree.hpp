@@ -101,10 +101,17 @@ namespace bst {
     using iterator = const_iterator;
 
     /**
+     * @brief Ensures that the given variadic arguments are
+     * convertible to the given type.
+     */
+    template<typename Type, typename... Ts>
+    using all_of_type = std::enable_if_t<std::conjunction_v<std::is_same<Type, Ts>...>>;
+
+    /**
      * @brief Construct a new binary search tree object.
      * @param options the options to associate to the tree.
      */
-    tree_t(): root{nullptr}, size_of_tree{0}, options(
+    tree_t(): root_{nullptr}, size_of_tree{0}, options(
       [] (const T& a, const T& b) -> int {
         return (a - b);
       },
@@ -116,7 +123,7 @@ namespace bst {
      * @brief Construct a new binary search tree object.
      * @param options the options to associate to the tree.
      */
-    tree_t(const options_t<T>& options): root{nullptr}, size_of_tree{0}, options{options} {}
+    tree_t(const options_t<T>& options): root_{nullptr}, size_of_tree{0}, options{options} {}
     
     /**
      * Copy-constructor is deleted.
@@ -171,12 +178,12 @@ namespace bst {
         auto new_node      = new node_t<T>(data);
         new_node->tree     = this;
         this->size_of_tree = 1;
-        return (this->root = new_node);
+        return (this->root_ = new_node);
       }
 
       // Otherwise, we recursively traverse the tree to find
       // the right position for the new node.
-      return (insert(this->root, data));
+      return (insert(this->root_, data));
     }
 
     /**
@@ -228,7 +235,7 @@ namespace bst {
         // The node doesn't have any children.
         if (!node->left && !node->right) {
           // If the node is the root, we need to set the root to nullptr.
-          if (this->root == node) this->root = nullptr;
+          if (this->root_ == node) this->root_ = nullptr;
           delete node;
           this->size_of_tree--;
           return (nullptr);
@@ -239,7 +246,7 @@ namespace bst {
           // Setting the new parent of the child node.
           successor->parent = node->parent;
           // If the node is the root, the child node becomes the new root.
-          if (this->root == node) this->root = successor;
+          if (this->root_ == node) this->root_ = successor;
           delete node;
           this->size_of_tree--;
           return (successor);
@@ -259,7 +266,7 @@ namespace bst {
      * @note Complexity is O(log(n)) on average, O(n) on the worst case.
      */
     void remove(const T& data) {
-      remove(this->root, data);
+      remove(this->root_, data);
     }
     
     /**
@@ -285,8 +292,8 @@ namespace bst {
 
       // If the node is the root, we need to assign
       // the root to a null pointer type.
-      if (this->root == node) {
-        this->root = nullptr;
+      if (this->root_ == node) {
+        this->root_ = nullptr;
       }
       delete node;
     }
@@ -297,7 +304,7 @@ namespace bst {
      * @note Complexity is O(n) on average.
      */
     void clear() {
-      this->clear(this->root);
+      this->clear(this->root_);
     }
 
     /**
@@ -323,8 +330,8 @@ namespace bst {
      * @param args the values to search for in the tree.
      * @return an array of optional pointers to the found nodes.
      */
-    template <class... Args, std::enable_if_t<(sizeof...(Args) >= 2)>* = nullptr>
-    auto find(Args... args) {
+    template <class... Args, typename = typename std::enable_if<all_of_type<T, Args...>::value>::type>
+    auto find(Args const& ... args) {
       size_t idx = 0;
       std::array<
         std::optional<const node_t<T>*>, sizeof...(Args)
@@ -375,7 +382,7 @@ namespace bst {
      * @note Complexity is O(log(n)) on average, O(n) in the worst case.
      */
     std::optional<const node_t<T>*> find(const T& data) const {
-      return (this->find(this->root, data));
+      return (this->find(this->root_, data));
     }
 
     /**
@@ -398,7 +405,7 @@ namespace bst {
      * @note Complexity is O(log(n)) on average, O(n) on the worst case.
      */
     const node_t<T>* min() const {
-      return (this->min(this->root));
+      return (this->min(this->root_));
     }
 
     /**
@@ -421,7 +428,7 @@ namespace bst {
      * @note Complexity is O(log(n)) on average, O(n) on the worst case.
      */
     const node_t<T>* max() const {
-      return (this->max(this->root));
+      return (this->max(this->root_));
     }
 
     /**
@@ -430,6 +437,13 @@ namespace bst {
      */
     size_t size() const {
       return (this->size_of_tree);
+    }
+
+    /**
+     * @return a pointer to the root node of the tree.
+     */
+    const node_t<T>* root() const {
+      return (this->root_);
     }
 
     /**
@@ -461,7 +475,7 @@ namespace bst {
      * @return a string representation of the binary-search tree.
      */
     const std::string to_string() const {
-      return (this->to_string(this->root));
+      return (this->to_string(this->root_));
     }
 
     /**
@@ -493,7 +507,7 @@ namespace bst {
     }
 
     private:
-      node_t<T>* root;
+      node_t<T>* root_;
       size_t size_of_tree;
       options_t<T> options;
 
@@ -595,7 +609,7 @@ namespace bst {
       dfs_iterator_t& operator++() {
         if (this->ptr == nullptr) {
           // Initialize the node pointer to the root node of the tree.
-          this->ptr = this->tree->root;
+          this->ptr = this->tree->root_;
           // If the tree is empty, we raise an exception.
           if (!this->ptr) {
             throw std::out_of_range("Iterator is out of range");

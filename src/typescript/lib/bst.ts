@@ -55,7 +55,7 @@ export class BinarySearchTree<T> implements ITree<T>, Iterable<Node<T>> {
   root(): Node<T> | null {
     return this.root_;
   }
-
+  
   /**
    * @brief A helper function to attach a node to another node.
    * @param node the node to attach the new node to.

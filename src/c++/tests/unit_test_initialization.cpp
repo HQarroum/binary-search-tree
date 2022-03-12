@@ -7,10 +7,7 @@ TEST(INITIALIZATION, OF_TREE) {
   auto tree = bst::tree_t<int>();
 
   EXPECT_EQ(tree.size(), (size_t) 0);
-}
-
-TEST(INITIALIZATION, OF_TREE_WITH_INVALID_COMPARATOR) {
-  
+  EXPECT_EQ(tree.root(), nullptr);
 }
 
 TEST(INITIALIZATION, OF_NODE) {
@@ -22,8 +19,4 @@ TEST(INITIALIZATION, OF_NODE) {
   EXPECT_EQ(node.parent, nullptr);
   EXPECT_EQ(node.tree, nullptr);
   EXPECT_EQ(node.value(), 50);
-}
-
-TEST(INITIALIZATION, OF_NODE_WITH_INVALID_DATA) {
-  
 }
