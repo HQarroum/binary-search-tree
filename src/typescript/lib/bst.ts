@@ -74,7 +74,6 @@ export class BinarySearchTree<T> implements ITree<T>, Iterable<Node<T>> {
     }
 
     new_node.parent = node;
-    new_node.tree = this;
     this.size_++;
     return (new_node);
   }
@@ -111,9 +110,8 @@ export class BinarySearchTree<T> implements ITree<T>, Iterable<Node<T>> {
    */
   insert(value: T): void {
     if (!this.root_) {
-      this.root_      = new Node<T>(value);
-      this.root_.tree = this;
-      this.size_      = 1;
+      this.root_ = new Node<T>(value);
+      this.size_ = 1;
     }
     this.insert_in(this.root_, value);
   }
@@ -141,6 +139,60 @@ export class BinarySearchTree<T> implements ITree<T>, Iterable<Node<T>> {
     } else {
       return (node);
     }
+  }
+
+  /**
+   * Private method used to recursively remove the node associated with `data`
+   * from the given subtree.
+   * @param node The node to remove from the binary-search tree.
+   * @param data The data associated with the node to remove.
+   */
+  remove_in(node: Node<T> | null, data: T): Node<T> | null {
+    if (!node) {
+      return (null);
+    }
+
+    // Comparing the given data to the current node's data.
+    const result = this.comparator(data, node.value);
+
+    if (result < 0)
+      node.left = this.remove_in(node.left, data);
+    else if (result > 0)
+      node.right = this.remove_in(node.right, data);
+    else {
+      if (!node.left && !node.right) {
+        // The node has no children.
+        if (this.root_ == node) {
+          this.root_ = null;
+        }
+        this.size_ -= 1;
+        return (null);
+      } else if (!node.left || !node.right) {
+        // The node has a single child.
+        const successor = node.right ? node.right : node.left;
+        successor!!.parent = node.parent;
+        if (this.root_ == node) {
+          this.root_ = successor;
+        }
+        this.size_ -= 1;
+        return (successor);
+      } else {
+        // The node has two children.
+        const successor = this.min(node.right);
+        node.value = successor?.value!!;
+        node.right = this.remove_in(node.right, successor?.value!!);
+      }
+    }
+    return (node);
+  }
+  
+  /**
+   * Removes the node associated with `data` from the binary-search tree.
+   * @param data The data associated with the node to remove.
+   * @returns 
+   */
+  remove(data: T): void {
+    this.remove_in(this.root_, data);
   }
 
   /**

@@ -25,6 +25,7 @@ Current version: **1.0.0**
       <th>Rust</th>
       <th>C</th>
       <th>C++</th>
+      <th>Kotlin</th>
     </tr>
   </thead>
   <tr>
@@ -33,6 +34,7 @@ Current version: **1.0.0**
     <td><img width="80" src="assets/rust.png"></td>
     <td><img width="80" src="assets/c.png" ></td>
     <td><img width="80" src="assets/c++.png" ></td>
+    <td><img width="80" src="assets/kotlin.png" ></td>
   </tr>
 </table>
 <br />

@@ -211,7 +211,7 @@ class BinarySearchTree:
     elif result > 0:
       node.right = self.__remove_node(node.right, data)
     else:
-      # The node has one child.
+      # The node has no children.
       if not node.left and not node.right:
         if self.root == node:
           self.root = None
