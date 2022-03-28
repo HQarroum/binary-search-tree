@@ -1,4 +1,7 @@
-package com.algorithms.trees.bst;
+package com.algorithms.trees.bst
+
+import com.algorithms.trees.bst.iterators.DfsIterator
+import com.algorithms.trees.bst.ITree
 
 /**
  * Type definition for a comparator function.
@@ -19,127 +22,133 @@ enum class Direction {
  * whose internal nodes each store a key greater than all the keys
  * in the node's left subtree and less than those in its right subtree.
  */
-class BinarySearchTree<T>(comparator: Comparator<T>) : Iterable<T> {
-  var root: Node<T>? = null;
-  var size: Int      = 0;
-  var comparator     = comparator;
+class BinarySearchTree<T>(private val comparator: Comparator<T>) : ITree<T>, Iterable<T> {
+  private var root: Node<T>? = null
+  private var size: Int      = 0
 
   /**
-   * @returns the size of the binary-search tree.
+   * @return the root node of the binary-search tree.
    */
-  fun size(): Int {
-    return (size);
+  override fun root(): Node<T>? {
+    return (this.root)
+  }
+
+  /**
+   * @return the size of the binary-search tree.
+   */
+  override fun size(): Int {
+    return (size)
   }
 
   /**
    * A helper function to attach a node to another node.
    * @param node the node to attach the new node to.
-   * @param data the data to associate with the new node.
+   * @param value the data to associate with the new node.
    * @param direction whether the new node should be attached to the left or right.
    * @return a reference to the newly attached node.
    * @note Complexity is O(log(n)) on average, O(n) on the worst case.
    */
-  fun attach(node: Node<T>, value: T, direction: Direction): Node<T> {
-    var new_node = Node<T>(value);
+  private fun attach(node: Node<T>, value: T, direction: Direction): Node<T> {
+    val newNode = Node(value)
 
     when (direction) {
-      Direction.LEFT -> node.left = new_node;
-      Direction.RIGHT -> node.right = new_node;
+      Direction.LEFT -> node.left = newNode
+      Direction.RIGHT -> node.right = newNode
     }
 
-    new_node.parent = node;
-    size++;
-    return (new_node);
+    newNode.parent = node
+    size += 1
+    return (newNode)
   }
 
   /**
    * Inserts a new node into the given subtree.
    * @param node the root of the subtree to insert the node into.
-   * @param data the data to associate with the new node.
+   * @param value the data to associate with the new node.
    * @return a pointer to the newly inserted node.
    * @note Complexity is O(log(n)) on average, O(n) on the worst case.
    */
-  private fun insert_in(node: Node<T>, value: T): Node<T> {
+  private fun insertIn(node: Node<T>, value: T): Node<T> {
     // Comparing the value associated with the nodes.
-    val result = comparator(value, node.value);
+    val result = comparator(value, node.value)
 
     return when {
       // If the value is less than the node's value,
       // insert the value in the left subtree.
-      result < 0 -> node.left?.also { insert_in(it, value) } ?: attach(node, value, Direction.LEFT)
+      result < 0 -> node.left?.also { insertIn(it, value) } ?: attach(node, value, Direction.LEFT)
       // If the value is greater than the node's value,
       // insert the value in the right subtree.
-      result > 0 -> node.right?.also { insert_in(it, value) } ?: attach(node, value, Direction.RIGHT)
+      result > 0 -> node.right?.also { insertIn(it, value) } ?: attach(node, value, Direction.RIGHT)
       // If the value is equal to the node's value,
       // do nothing.
       else -> node
-    };
+    }
   }
 
   /**
    * Inserts the given value in the binary-search tree.
    * @param value the value to insert.
    */
-  fun insert(value: T) {
+  override fun insert(value: T) {
     root?.run {
-      insert_in(this, value);
-    } ?: {
-      root = Node<T>(value);
-      size = 1;
-    }();
+      insertIn(this, value)
+    } ?: run {
+      root = Node(value)
+      size = 1
+    }
   }
 
   /**
    * Private method used to recursively remove the node associated with `data`
    * from the given subtree.
    * @param node The node to remove from the binary-search tree.
-   * @param data The data associated with the node to remove.
+   * @param value The data associated with the node to remove.
    */
-  private fun remove_in(node: Node<T>?, data: T): Node<T>? {
+  private fun remove_in(node: Node<T>?, value: T): Node<T>? {
     if (node == null) {
-      return (null);
+      return (null)
     }
 
     // Comparing the given data to the current node's data.
-    val result = this.comparator(data, node.value);
+    val result = this.comparator(value, node.value)
 
     if (result < 0)
-      node.left = this.remove_in(node.left, data);
+      node.left = this.remove_in(node.left, value)
     else if (result > 0)
-      node.right = this.remove_in(node.right, data);
+      node.right = this.remove_in(node.right, value)
     else {
       if (node.left == null && node.right == null) {
         // The node has no children.
         if (this.root == node) {
-          this.root = null;
+          this.root = null
         }
-        this.size -= 1;
-        return (null);
+        this.size -= 1
+        return (null)
       } else if (node.left == null || node.right == null) {
         // The node has a single child.
-        var successor = if (node.right != null) node.right else node.left;
-        successor!!.parent = node.parent;
+        val successor = if (node.right != null) node.right else node.left
+        successor!!.parent = node.parent
         if (this.root == node) {
-          this.root = successor;
+          this.root = successor
         }
-        this.size -= 1;
-        return (successor);
+        this.size -= 1
+        return (successor)
       } else {
         // The node has two children.
-        var successor = this.min(node.right);
-        node.data = successor?.data!!;
-        node.right = this.remove_in(node.right, successor.data!!);
+        val successor = this.min(node.right)
+        node.data = successor?.data!!
+        node.right = this.remove_in(node.right, successor.data!!)
       }
     }
-    return (node);
+    return (node)
   }
   
   /**
    * Removes the node associated with `data` from the binary-search tree.
    * @param data The data associated with the node to remove.
    */
-  fun remove(data: T) {
-    this.remove_in(this.root, data);
+  override fun remove(data: T) {
+    this.remove_in(this.root, data)
   }
 
   /**
@@ -148,25 +157,25 @@ class BinarySearchTree<T>(comparator: Comparator<T>) : Iterable<T> {
    * @note Complexity is O(n) on average.
    */
   fun clear(node: Node<T>?) {
-    if (node == null) return;
+    if (node == null) return
 
     // Recursively clear the left subtree.
-    clear(node.left);
-    clear(node.right);
+    clear(node.left)
+    clear(node.right)
 
     // Detaching the node from its parent.
     when {
-      node.parent?.left == node -> node.parent?.left = null;
-      node.parent?.right == node -> node.parent?.right = null;
+      node.parent?.left == node -> node.parent?.left = null
+      node.parent?.right == node -> node.parent?.right = null
     }
 
-    // Decremeneting the size of the tree.
-    size = size - 1;
+    // Decrementing the size of the tree.
+    size -= 1
 
     // If the node is the root, we need to assign
     // the root to a null pointer type.
     if (root == node) {
-      root = null;
+      root = null
     }
   }
 
@@ -176,7 +185,7 @@ class BinarySearchTree<T>(comparator: Comparator<T>) : Iterable<T> {
    * @note Complexity is O(n) on average.
    */
   fun clear() {
-    this.clear(this.root);
+    this.clear(this.root)
   }
 
   /**
@@ -187,13 +196,13 @@ class BinarySearchTree<T>(comparator: Comparator<T>) : Iterable<T> {
    * @returns the node associated with the given value,
    * or null if the value is not in the tree.
    */
-  fun find(value: T, node: Node<T>? = this.root): Node<T>? {
+  override fun find(value: T, node: Node<T>?): Node<T>? {
     if (node == null) {
-      return (null);
+      return (null)
     }
 
     // Comparing the value associated with the nodes.
-    val result = comparator(value, node.value);
+    val result = comparator(value, node.value)
 
     return when {
       // Looking in the left subtree.
@@ -201,7 +210,7 @@ class BinarySearchTree<T>(comparator: Comparator<T>) : Iterable<T> {
       // Looking in the right subtree.
       result > 0 -> find(value, node.right)
       // We found the node.
-      else -> node;
+      else -> node
     }
   }
 
@@ -210,13 +219,13 @@ class BinarySearchTree<T>(comparator: Comparator<T>) : Iterable<T> {
    * or null if the tree is empty.
    * @param node an optional node to start the search from.
    */
-  fun max(node: Node<T>? = this.root): Node<T>? {
-    var current = node;
+  override fun max(node: Node<T>?): Node<T>? {
+    var current = node
 
     while (current?.right != null) {
-      current = current.right;
+      current = current.right
     }
-    return (current);
+    return (current)
   }
 
   /**
@@ -224,13 +233,13 @@ class BinarySearchTree<T>(comparator: Comparator<T>) : Iterable<T> {
    * or null if the tree is empty.
    * @param node an optional node to start the search from.
    */
-  fun min(node: Node<T>? = this.root): Node<T>? {
-    var current = node;
+  override fun min(node: Node<T>?): Node<T>? {
+    var current = node
 
     while (current?.left != null) {
-      current = current.left;
+      current = current.left
     }
-    return (current);
+    return (current)
   }
 
   /**
@@ -238,26 +247,26 @@ class BinarySearchTree<T>(comparator: Comparator<T>) : Iterable<T> {
    * @param node the root of the subtree to sort.
    * @returns an array containing the sorted values.
    */
-  fun sort(node: Node<T>? = this.root): ArrayList<T> {
-    var result: ArrayList<T> = ArrayList<T>();
+  override fun sort(node: Node<T>?): ArrayList<T> {
+    val result = ArrayList<T>()
 
     if (node == null) {
-      return (result);
+      return (result)
     }
 
     // Iterating over the nodes using a depth-first iteration
     // and pushing the values to the result array.
     for (item in this) {
-      result.add(item);
+      result.add(item)
     }
-    return (result);
+    return (result)
   }
 
   /**
    * @returns a depth-first iterator.
    */
   override fun iterator(): Iterator<T> {
-    return (DfsIterator(this));
+    return (DfsIterator(this))
   }
 
   /**
@@ -267,29 +276,29 @@ class BinarySearchTree<T>(comparator: Comparator<T>) : Iterable<T> {
    * @returns a string representation of the binary-search tree.
    */
   private fun print(node: Node<T>? = this.root, result: String = "", prefix: String = ""): String {
-    var resultStr = result;
+    var resultStr = result
 
     if (node == null) {
       // We reached the end of a subtree.
-      return (result);
+      return (result)
     }
     // Concatenate the prefix with the current node's data.
-    resultStr += "${prefix}├──${node.value}\n";
+    resultStr += "${prefix}├──${node.value}\n"
     // Whether the current node is the left child of its parent.
-    val isRight = node.parent?.right == node;
+    val isRight = node.parent?.right == node
     // A separator to display between the current node's children.
-    val separator = if (isRight) "│  " else "   ";
+    val separator = if (isRight) "│  " else "   "
     // Recursively display the left children.
-    resultStr = print(node.right, resultStr, prefix + separator);
+    resultStr = print(node.right, resultStr, prefix + separator)
     // Recursively display the left children.
-    resultStr = print(node.left, resultStr, prefix + separator);
-    return (resultStr);
+    resultStr = print(node.left, resultStr, prefix + separator)
+    return (resultStr)
   }
 
   /**
    * Returns a string representation of the binary-search tree.
    */
   override fun toString(): String {
-    return (print(this.root));
+    return (print(this.root))
   }
 }
