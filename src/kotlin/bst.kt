@@ -104,7 +104,7 @@ class BinarySearchTree<T>(private val comparator: Comparator<T>) : ITree<T>, Ite
    * @param node The node to remove from the binary-search tree.
    * @param value The data associated with the node to remove.
    */
-  private fun remove_in(node: Node<T>?, value: T): Node<T>? {
+  private fun removeIn(node: Node<T>?, value: T): Node<T>? {
     if (node == null) {
       return (null)
     }
@@ -112,32 +112,36 @@ class BinarySearchTree<T>(private val comparator: Comparator<T>) : ITree<T>, Ite
     // Comparing the given data to the current node's data.
     val result = this.comparator(value, node.value)
 
-    if (result < 0)
-      node.left = this.remove_in(node.left, value)
-    else if (result > 0)
-      node.right = this.remove_in(node.right, value)
-    else {
-      if (node.left == null && node.right == null) {
-        // The node has no children.
-        if (this.root == node) {
-          this.root = null
+    when {
+      result < 0 -> node.left = this.removeIn(node.left, value)
+      result > 0 -> node.right = this.removeIn(node.right, value)
+      else -> {
+        when (node.children()) {
+          0 -> {
+            // The node has no children.
+            if (this.root == node) {
+              this.root = null
+            }
+            this.size -= 1
+            return (null)
+          }
+          1 -> {
+            // The node has a single child.
+            val successor = if (node.right != null) node.right else node.left
+            successor!!.parent = node.parent
+            if (this.root == node) {
+              this.root = successor
+            }
+            this.size -= 1
+            return (successor)
+          }
+          2 -> {
+            // The node has two children.
+            val successor = this.min(node.right)
+            node.data = successor?.data!!
+            node.right = this.removeIn(node.right, successor.data!!)
+          }
         }
-        this.size -= 1
-        return (null)
-      } else if (node.left == null || node.right == null) {
-        // The node has a single child.
-        val successor = if (node.right != null) node.right else node.left
-        successor!!.parent = node.parent
-        if (this.root == node) {
-          this.root = successor
-        }
-        this.size -= 1
-        return (successor)
-      } else {
-        // The node has two children.
-        val successor = this.min(node.right)
-        node.data = successor?.data!!
-        node.right = this.remove_in(node.right, successor.data!!)
       }
     }
     return (node)
@@ -148,7 +152,7 @@ class BinarySearchTree<T>(private val comparator: Comparator<T>) : ITree<T>, Ite
    * @param data The data associated with the node to remove.
    */
   override fun remove(data: T) {
-    this.remove_in(this.root, data)
+    this.removeIn(this.root, data)
   }
 
   /**

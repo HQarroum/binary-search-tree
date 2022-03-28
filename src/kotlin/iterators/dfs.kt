@@ -20,20 +20,20 @@ class DfsIterator<T>(tree: ITree<T>) : Iterator<T> {
       // in the binary search tree.
       node = tree.min()
     } else {
-      if (node!!.right != null) {
+      if (node?.right != null) {
         node = tree.min(node!!.right)
       } else {
-        var current = node!!.parent
+        var current = node?.parent
 
-        while (current != null && node === current.right) {
+        while (node == current?.right) {
           node = current
-          current = current.parent
+          current = current?.parent
         }
         node = current
       }
     }
     
-    iterations++
+    iterations += 1
     return (node?.data!!)
   }
 
