@@ -20,7 +20,7 @@ class BinarySearchTree:
     first argument is greater than the second and zero if the two arguments
     are equal.
     """
-    if not 'comparator' in options:
+    if 'comparator' not in options:
       raise Exception('No comparator provided.')
     
     self.root = None
