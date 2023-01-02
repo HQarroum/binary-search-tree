@@ -60,7 +60,7 @@ A binary search tree supports operations like `search`, `insertion`, `deletion`,
 
 <br /><br />
 <p align="center">
-  <img width="700" src="assets/bst.png" />
+  <img width="500" src="assets/bst.png" />
 </p>
 <br /><br />
 
