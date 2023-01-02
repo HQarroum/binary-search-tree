@@ -162,7 +162,7 @@ export class BinarySearchTree<T> implements ITree<T>, Iterable<Node<T>> {
     else {
       if (!node.left && !node.right) {
         // The node has no children.
-        if (this.root_ == node) {
+        if (this.root_ === node) {
           this.root_ = null;
         }
         this.size_ -= 1;
@@ -171,7 +171,7 @@ export class BinarySearchTree<T> implements ITree<T>, Iterable<Node<T>> {
         // The node has a single child.
         const successor = node.right ? node.right : node.left;
         successor!!.parent = node.parent;
-        if (this.root_ == node) {
+        if (this.root_ === node) {
           this.root_ = successor;
         }
         this.size_ -= 1;
