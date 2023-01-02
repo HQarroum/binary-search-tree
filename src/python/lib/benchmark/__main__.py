@@ -21,7 +21,8 @@ if __name__ == '__main__':
   # Inserting elements sequentially.
   for element in array:
     bst.insert(element)
-    assert(bst.find(data=element) is not None)
+    if bst.find(data=element) is None:
+      raise AssertionError("Found element is not expected to be None")
 
   delta = datetime.datetime.now() - begin
   print(f'{delta.total_seconds() * 1000} ms')
