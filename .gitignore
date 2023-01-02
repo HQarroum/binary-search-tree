@@ -1,0 +1,33 @@
+# Logs
+logs
+*.log
+
+# Kotlin
+*.iml
+.idea
+*.jar
+
+# Python
+__pycache__/
+*.pyc
+
+# C/C++
+*.o
+*.a
+*.so
+
+# Build
+dist/
+build/
+
+# Bazel
+src/c++/bazel-bin
+src/c++/bazel-c++
+src/c++/bazel-out
+src/c++/bazel-testlogs
+
+# Gradle
+src/kotlin/.gradle/
+
+# JS
+node_modules/
