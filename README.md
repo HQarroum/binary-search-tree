@@ -66,7 +66,7 @@ A binary search tree supports operations like `search`, `insertion`, `deletion`,
 
 ## 📈 Benchmarks
 
-The following benchmark results have been executed on a *Macbook M1 Pro* running 100.000 insertions and searches on a binary search tree.
+The following benchmark results have been executed on a **Macbook M1 Pro** running synchronously 100.000 insertions and searches on the binary search tree.
 
 <br /><br />
 <p align="center">

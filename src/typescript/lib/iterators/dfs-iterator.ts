@@ -33,7 +33,7 @@ export class DfsIterator<T> implements Iterator<Node<T>> {
       return ({ done: true, value: null });
     }
 
-    if (this.iterations == 0) {
+    if (this.iterations === 0) {
       // Initializing the node to the smallest node
       // in the binary search tree.
       this.node = this.tree.min();

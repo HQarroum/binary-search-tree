@@ -34,7 +34,7 @@ const tree = new BinarySearchTree<number>({
 // Insert and searching for each element.
 for (const value of array) {
   tree.insert(value);
-  assert(tree.find(value) != null);
+  assert(tree.find(value) !== null);
 }
 
 console.timeEnd('benchmark');

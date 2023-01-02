@@ -201,7 +201,7 @@ export class BinarySearchTree<T> implements ITree<T>, Iterable<Node<T>> {
    * @param node an optional node to start the search from.
    */
   max(node: Node<T> | null = this.root_): Node<T> | null {
-    while (node && node.right != null) {
+    while (node && node.right !== null) {
       node = node.right;
     }
     return (node);
@@ -213,7 +213,7 @@ export class BinarySearchTree<T> implements ITree<T>, Iterable<Node<T>> {
    * @param node an optional node to start the search from.
    */
   min(node: Node<T> | null = this.root_): Node<T> | null {
-    while (node && node.left != null) {
+    while (node && node.left !== null) {
       node = node.left;
     }
     return (node);
@@ -245,7 +245,7 @@ export class BinarySearchTree<T> implements ITree<T>, Iterable<Node<T>> {
       k = k - 1;
 
       // If the current node is the kth smallest, we return it.
-      if (k == 0) {
+      if (k === 0) {
         return (node);
       }
 
@@ -326,7 +326,7 @@ export class BinarySearchTree<T> implements ITree<T>, Iterable<Node<T>> {
     // Concatenate the prefix with the current node's data.
     result += `${prefix}├──${node.value}\n`;
     // Whether the current node is the left child of its parent.
-    const isRight = node.parent && node.parent.right == node;
+    const isRight = node.parent && node.parent.right === node;
     // A separator to display between the current node's children.
     const separator = isRight ? "│  " : "   ";
     // Recursively display the left children.
