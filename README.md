@@ -17,7 +17,7 @@ Current version: **1.0.0**
 
 ## 🔰 Description
 
-This repository contains idiomatic implementations of a [Binary Search Tree](https://en.wikipedia.org/wiki/Binary_search_tree) in multiple programming languages. The purpose of this repository is purely educational and allows to introduce a binary search tree recursive data structure, as well as its many implementation details across multiple languages.
+This repository contains idiomatic implementations of a [Binary Search Tree](https://en.wikipedia.org/wiki/Binary_search_tree) in multiple programming languages. The purpose of this repository is purely educational and aims to introduce a binary search tree recursive data structure, as well as its many implementation details across multiple languages.
 
 A binary search tree is a tree data structure that can store arbitrarily typed data by enforcing the following properties :
 
