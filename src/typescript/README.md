@@ -1,6 +1,8 @@
 <br /><br /><br /><br />
 <p align="center">
-  <img width="240" src="../../assets/typescript.png" />
+  <img width="120" src="../../assets/typescript.png" />
+  &nbsp;&nbsp;
+  <img width="50" src="../../assets/icon.png" />
 </p>
 <br /><br />
 
