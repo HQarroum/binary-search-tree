@@ -11,39 +11,9 @@ Current version: **1.0.0**
 
 ## 📋 Table of content
 
-- [Implementations](#-implementations)
 - [Description](#-description)
-- [Benchmarks](#-benchmarks)
+- [Implementations](#-implementations)
 - [See also](#-see-also)
-
-## ✏️ Implementations
-
-This repository contains implementations in the following languages.
-
-> Click to access a particular implementation.
-
-<br />
-<table align="center">
-  <thead>
-    <tr>
-      <th>Python</th>
-      <th>Typescript</th>
-      <th>C</th>
-      <th>C++</th>
-      <th>Kotlin</th>
-    </tr>
-  </thead>
-  <tr>
-    <td><a href="src/python"><img width="80" src="assets/python.png" ></a></td>
-    <td><a href="src/typescript"><img width="80" src="assets/typescript.png" /></a></td>
-    <td><a href="src/c"><img width="80" src="assets/c.png" ></a></td>
-    <td><a href="src/c++"><img width="80" src="assets/c++.png" ></a></td>
-    <td><a href="src/kotlin"><img width="80" src="assets/kotlin.png" ></a></td>
-  </tr>
-</table>
-<br />
-
-> Please refer to each implementation on how to use it, test it and benchmark it.
 
 ## 🔰 Description
 
@@ -64,15 +34,32 @@ A binary search tree supports operations like `search`, `insertion`, `deletion`,
 </p>
 <br /><br />
 
-## 📈 Benchmarks
+## ✏️ Implementations
 
-The following benchmark results have been executed on a **Macbook M1 Pro** running synchronously 100.000 insertions and searches on the binary search tree.
+This repository contains implementations in the following languages.
 
-<br /><br />
-<p align="center">
-  <img width="700" src="assets/benchmark.png" />
-</p>
-<br /><br />
+> Click to access a particular implementation 👇.
+
+<br />
+<table align="center">
+  <thead>
+    <tr>
+      <th>Python</th>
+      <th>Typescript</th>
+      <th>C</th>
+      <th>C++</th>
+      <th>Kotlin</th>
+    </tr>
+  </thead>
+  <tr>
+    <td><a href="src/python"><img width="60" src="assets/python.png" ></a></td>
+    <td><a href="src/typescript"><img width="60" src="assets/typescript.png" /></a></td>
+    <td><a href="src/c"><img width="60" src="assets/c.png" ></a></td>
+    <td><a href="src/c++"><img width="60" src="assets/c++.png" ></a></td>
+    <td><a href="src/kotlin"><img width="60" src="assets/kotlin.png" ></a></td>
+  </tr>
+</table>
+<br />
 
 ## 👀 See also
 
