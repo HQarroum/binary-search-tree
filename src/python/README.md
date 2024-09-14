@@ -1,6 +1,7 @@
 <br /><br /><br /><br />
 <p align="center">
-  <img width="240" src="../../assets/python.png" />
+  <img width="120" src="../../assets/python.png" />
+  <img width="50" src="../../assets/icon.png" />
 </p>
 <br /><br />
 
