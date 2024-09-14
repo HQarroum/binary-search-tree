@@ -26,7 +26,9 @@ A binary search tree is a tree data structure that can store arbitrarily typed d
 - The left and right subtree each must also be a binary search tree.
 - It doesn't have any duplicate nodes.
 
-A binary search tree supports operations like `search`, `insertion`, `deletion`, `min-max search`, in `O(h)` time where `h` is the height of the tree. Below is an example of the structural organization of elements in a binary search tree.
+A binary search tree supports operations like `search`, `insertion`, `deletion`, `min-max search`, in $O(h)$ time where $h$ is the height of the tree. In a fully balanced binary search tree, the complexity of these operations tends to $O(n\log{}n)$, where $n$ is the number of nodes in the tree. In the worst case scenario of a fully unbalanced tree, the complexity tends to $O(n)$.
+
+> Below is an example of the structural organization of elements in a binary search tree.
 
 <br /><br />
 <p align="center">
