@@ -1,6 +1,6 @@
 <br /><br /><br /><br />
 <p align="center">
-  <img width="240" src="assets/icon.png" />
+  <img width="180" src="assets/icon.png" />
 </p>
 <br /><br />
 
